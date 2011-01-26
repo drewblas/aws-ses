@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{aws-ses}
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Drew Blas", "Marcel Molina Jr."]
@@ -29,19 +29,23 @@ Gem::Specification.new do |s|
     "Rakefile",
     "TODO",
     "VERSION",
+    "aws-ses.gemspec",
     "lib/aws/ses.rb",
     "lib/aws/ses/addresses.rb",
     "lib/aws/ses/base.rb",
     "lib/aws/ses/exceptions.rb",
     "lib/aws/ses/extensions.rb",
+    "lib/aws/ses/info.rb",
     "lib/aws/ses/response.rb",
+    "lib/aws/ses/send_email.rb",
     "lib/aws/ses/version.rb",
     "test/base_test.rb",
     "test/extensions_test.rb",
     "test/fixtures.rb",
     "test/helper.rb",
     "test/mocks/fake_response.rb",
-    "test/response_test.rb"
+    "test/response_test.rb",
+    "test/send_email_test.rb"
   ]
   s.homepage = %q{http://github.com/drewblas/aws-ses}
   s.licenses = ["MIT"]
@@ -54,7 +58,8 @@ Gem::Specification.new do |s|
     "test/fixtures.rb",
     "test/helper.rb",
     "test/mocks/fake_response.rb",
-    "test/response_test.rb"
+    "test/response_test.rb",
+    "test/send_email_test.rb"
   ]
 
   if s.respond_to? :specification_version then
@@ -64,7 +69,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<xml-simple>, [">= 0"])
       s.add_runtime_dependency(%q<builder>, [">= 0"])
       s.add_runtime_dependency(%q<mime-types>, [">= 0"])
-      s.add_development_dependency(%q<shoulda>, [">= 0"])
+      s.add_development_dependency(%q<shoulda-context>, [">= 0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
@@ -76,7 +81,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<xml-simple>, [">= 0"])
       s.add_dependency(%q<builder>, [">= 0"])
       s.add_dependency(%q<mime-types>, [">= 0"])
-      s.add_dependency(%q<shoulda>, [">= 0"])
+      s.add_dependency(%q<shoulda-context>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_dependency(%q<rcov>, [">= 0"])
@@ -89,7 +94,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<xml-simple>, [">= 0"])
     s.add_dependency(%q<builder>, [">= 0"])
     s.add_dependency(%q<mime-types>, [">= 0"])
-    s.add_dependency(%q<shoulda>, [">= 0"])
+    s.add_dependency(%q<shoulda-context>, [">= 0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
     s.add_dependency(%q<rcov>, [">= 0"])

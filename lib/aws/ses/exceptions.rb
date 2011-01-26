@@ -20,15 +20,6 @@ module AWS
   # Server : Internal Error.
   class InternalError < Error; end
 
-  # Server : Not enough available addresses to satisfy your minimum request.
-  class InsufficientAddressCapacity < Error; end
-
-  # Server : There are not enough available instances to satisfy your minimum request.
-  class InsufficientInstanceCapacity < Error; end
-
-  # Server : There are not enough available reserved instances to satisfy your minimum request.
-  class InsufficientReservedInstanceCapacity < Error; end
-
   # Server : The server is overloaded and cannot handle the request.
   class Unavailable < Error; end
 

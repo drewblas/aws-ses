@@ -56,6 +56,8 @@ module AWS #:nodoc:
     
     # AWS::SES::Base is the abstract super class of all classes who make requests against SES
     class Base   
+      include SendEmail
+      include Info
       
       attr_reader :use_ssl, :server, :proxy_server, :port
 
@@ -199,7 +201,7 @@ module AWS #:nodoc:
         if AWS.const_defined?(error_code)
           raise AWS.const_get(error_code), error_message
         else
-          raise AWS::Error, error_message
+          raise AWS::Error, error_message + error_code
         end
 
       end

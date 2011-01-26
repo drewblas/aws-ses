@@ -15,8 +15,10 @@ end
 $:.unshift(File.dirname(__FILE__))
 require 'ses/extensions'
 
-require 'ses/base'
 require 'ses/response'
+require 'ses/send_email'
+require 'ses/info'
+require 'ses/base'
 require 'ses/exceptions'
 require 'ses/version'
 require 'ses/addresses'

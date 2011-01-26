@@ -57,7 +57,7 @@ namespace :doc do
     rdoc.title    = "AWS::SES -- Support for Amazon SES's REST api #{version}"  
     rdoc.options << '--line-numbers' << '--inline-source'
     rdoc.rdoc_files.include('README')
-    rdoc.rdoc_files.include('COPYING')
+    rdoc.rdoc_files.include('LICENSE')
     rdoc.rdoc_files.include('lib/**/*.rb')
   end
   

@@ -8,7 +8,7 @@ rescue Bundler::BundlerError => e
   exit e.status_code
 end
 require 'test/unit'
-require 'shoulda'
+require 'shoulda-context'
 
 begin
   require 'ruby-debug'
@@ -26,10 +26,12 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'aws/ses'
 
 class Test::Unit::TestCase
+  require 'net/http'
+  require 'net/https'
+  
   include AWS::SES
   
-  def mock_connection_for(instance, klass, options = {})    
-    data = options[:returns]
+  def mock_connection(object, data = {})
     return_values = case data
     when Hash
       FakeResponse.new(data)
@@ -39,10 +41,16 @@ class Test::Unit::TestCase
       abort "Response data for mock connection must be a Hash or an Array. Was #{data.inspect}."
     end
     
-    connection = flexmock('Mock connection') do |mock|
+    connection = flexmock(Net::HTTP.new) do |mock|
       mock.should_receive(:request).and_return(*return_values).at_least.once
     end
 
-    instance.should_receive(:connection).and_return(connection)
+    mock = flexmock(object)
+    mock.should_receive(:connection).and_return(connection)
+    mock
+  end
+  
+  def generate_base
+    Base.new(:access_key_id=>'123', :secret_access_key=>'abc')
   end
 end

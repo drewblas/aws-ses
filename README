@@ -20,12 +20,30 @@ Before you can do anything, you must establish a connection using Base.new.  A b
 The minimum connection options that you must specify are your access key id and your secret access key.
 
 
-= Addresses
+== Send E-mail
+
+Adds functionality for send_email and send_raw_email
+Use the following to send an e-mail:
+
+  ses = AWS::SES::Base.new( ... connection info ... )
+  ses.send_email :to        => ['jon@example.com', 'dave@example.com'],
+               :source    => 'steve@example.com',
+               :subject   => 'Subject Line'
+               :text_body => 'Internal text body'
+
+
+
+== Addresses
 
 AWS::SES::Addresses provides for:
 * Listing verified e-mail addresses
 * Adding new e-mail addresses to verify
 * Deleting verified e-mail addresses
+
+
+== Info
+
+Adds functionality for the statistics and info functionality
 
 
 == Contributing to aws-ses

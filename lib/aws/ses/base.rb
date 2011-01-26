@@ -115,12 +115,16 @@ module AWS #:nodoc:
 
       end
       
+      def connection
+        @http
+      end
+      
       # Make the connection to AWS EC2 passing in our request.  
       # allow us to have a one line call in each method which will do all of the work
       # in making the actual request to AWS.
       def request(action, params = {})
 
-        @http.start do
+        connection.start do
           # remove any keys that have nil or empty values
           params.reject! { |key, value| value.nil? or value.empty?}
           
@@ -143,7 +147,7 @@ module AWS #:nodoc:
           req['Date'] = timestamp.httpdate
           req['User-Agent'] = "github-aws-ses-ruby-gem"
 
-          response = @http.request(req, query)
+          response = connection.request(req, query)
 
           # Make a call to see if we need to throw an error based on the response given by EC2
           # All error classes are defined in EC2/exceptions.rb

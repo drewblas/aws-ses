@@ -1,0 +1,26 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    builder (3.0.0)
+    git (1.2.5)
+    jeweler (1.5.2)
+      bundler (~> 1.0.0)
+      git (>= 1.2.5)
+      rake
+    mime-types (1.16)
+    rake (0.8.7)
+    rcov (0.9.9)
+    shoulda (2.11.3)
+    xml-simple (1.0.13)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  builder
+  bundler (~> 1.0.0)
+  jeweler (~> 1.5.2)
+  mime-types
+  rcov
+  shoulda
+  xml-simple

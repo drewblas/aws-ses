@@ -1,4 +1,8 @@
-head:
+0.2.0:
+* Added info support
+* Added send_email
+
+0.1.0:
 - Initial creation that supports:
 
 * addresses.list

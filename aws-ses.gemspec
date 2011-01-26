@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "TODO",
     "VERSION",
+    "aws-ses.gemspec",
     "lib/aws/ses.rb",
     "lib/aws/ses/addresses.rb",
     "lib/aws/ses/base.rb",

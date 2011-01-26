@@ -4,6 +4,19 @@ module AWS
     # * Listing verified e-mail addresses
     # * Adding new e-mail addresses to verify
     # * Deleting verified e-mail addresses
+    #
+    # You can access these methods as follows:
+    #
+    #   ses = AWS::SES::Base.new( ... connection info ... )
+    #
+    #   # Get a list of verified addresses
+    #   ses.addresses.list.result
+    #
+    #   # Add a new e-mail address to verify
+    #   ses.addresses.verify('jon@example.com')
+    #
+    #   # Delete an e-mail address
+    #   ses.addresses.delete('jon@example.com')
     class Addresses < Base
       def initialize(ses)
         @ses = ses

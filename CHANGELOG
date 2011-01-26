@@ -1,0 +1,6 @@
+head:
+- Initial creation that supports:
+
+* addresses.list
+* addresses.verify(email)
+* addresses.delete(email)

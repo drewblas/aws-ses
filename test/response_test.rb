@@ -23,11 +23,3 @@ class BaseResponseTest < Test::Unit::TestCase
     assert_equal original_headers, new_headers
   end
 end
-
-class ErrorResponseTest < Test::Unit::TestCase
-  def test_error_responses_are_always_in_error
-    assert Error.new('ErrorAction', FakeResponse.new).error?
-    assert Error.new('ErrorAction', FakeResponse.new(:code => 200)).error?
-    assert Error.new('ErrorAction', FakeResponse.new(:headers => {'content-type' => 'text/plain'})).error?
-  end
-end

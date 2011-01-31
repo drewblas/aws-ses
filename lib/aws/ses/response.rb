@@ -42,11 +42,11 @@ module AWS
       end
 
       def error?
-        !success? && response['content-type'] == 'application/xml'
+        !success? && (response['content-type'] == 'application/xml' || response['content-type'] == 'text/xml')
       end
 
       def error
-        Error.new(parsed, self)
+        parsed['Error']
       end
       memoized :error
 
@@ -83,15 +83,25 @@ module AWS
     #    exception.response.error
     #    # => <Error>
     #   end
-    class Error < Response
-      def error? 
-        true
+    class ResponseError < StandardError
+      attr_reader :response
+      def initialize(response)
+        @response = response
+        super("AWS::SES Response Error: #{message}")
+      end
+      
+      def code
+        @response.code
+      end
+      
+      def message
+        @response.error['Code'] + @response.error['Message']
       end
     
       def inspect
-        "#<%s:0x%s %s %s: '%s'>" % [self.class.name, object_id, response.code, error.code, error.message]
+        "#<%s:0x%s %s '%s'>" % [self.class.name, object_id, code, message]
       end
     end
-  end #module SES
+  end # module SES
 end  # module AWS
 

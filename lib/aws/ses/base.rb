@@ -123,7 +123,7 @@ module AWS #:nodoc:
         @http
       end
       
-      # Make the connection to AWS EC2 passing in our request.  
+      # Make the connection to AWS passing in our request.  
       # allow us to have a one line call in each method which will do all of the work
       # in making the actual request to AWS.
       def request(action, params = {})
@@ -150,13 +150,15 @@ module AWS #:nodoc:
         req['User-Agent'] = "github-aws-ses-ruby-gem"
 
         response = connection.post(@path, query, req)
-
-        # Make a call to see if we need to throw an error based on the response given by EC2
-        # All error classes are defined in EC2/exceptions.rb
-        # aws_error?(response)
         
         response_class = AWS::SES.const_get( "#{action}Response" )
-        return response_class.new(action, response)
+        result = response_class.new(action, response)
+        
+        if result.error?
+          raise ResponseError.new(result)
+        end
+        
+        result
       end
 
       # Set the Authorization header using AWS signed header authentication
@@ -164,50 +166,6 @@ module AWS #:nodoc:
         encoded_canonical = SES.encode(secret_access_key, timestamp, false)
         SES.authorization_header(@access_key_id, 'HmacSHA256', encoded_canonical)
       end
-
-      # Raises the appropriate error if the specified Net::HTTPResponse object
-      # contains an AWS error; returns +false+ otherwise.
-      def aws_error?(response)
-        # return false if we got a HTTP 200 code,
-        # otherwise there is some type of error (40x,50x) and
-        # we should try to raise an appropriate exception
-        # from one of our exception classes defined in
-        # exceptions.rb
-        return false if response.is_a?(Net::HTTPSuccess)
-
-        raise AWS::Error, "Unexpected server error. response.body is: #{response.body}" if response.is_a?(Net::HTTPServerError)
-
-        # parse the XML document so we can walk through it
-        doc = REXML::Document.new(response.body)
-
-        # Check that the Error element is in the place we would expect.
-        # and if not raise a generic error exception
-        unless doc.root.elements['Error'].name == 'Error'
-          raise Error, "Unexpected error format. response.body is: #{response.body}"
-        end
-
-        # An valid error response looks like this:
-        # <?xml version="1.0"?><Response><Errors><Error><Code>InvalidParameterCombination</Code><Message>Unknown parameter: foo</Message></Error></Errors><RequestID>291cef62-3e86-414b-900e-17246eccfae8</RequestID></Response>
-        # AWS throws some exception codes that look like Error.SubError.  Since we can't name classes this way
-        # we need to strip out the '.' in the error 'Code' and we name the error exceptions with this
-        # non '.' name as well.
-        error_code    = doc.root.elements['Error'].elements['Code'].text.gsub('.', '')
-        error_message = doc.root.elements['Error'].elements['Message'].text
-
-        # Raise one of our specific error classes if it exists.
-        # otherwise, throw a generic EC2 Error with a few details.
-        if AWS.const_defined?(error_code)
-          raise AWS.const_get(error_code), error_message
-        else
-          raise AWS::Error, error_message + error_code
-        end
-
-      end
-         
-      class << self
-        
-        
-      end # class methods
     end # class Base
   end # Module SES
 end # Module AWS

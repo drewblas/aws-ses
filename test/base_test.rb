@@ -28,11 +28,13 @@ class BaseTest < Test::Unit::TestCase
       </ErrorResponse>
     }})
     
-    result = @base.request('', {})
+    assert_raises ResponseError do
+      result = @base.request('', {})
+    end
     
-    assert !result.success?
-    assert result.error?
-    assert result.error.error?
-    assert result.error.code
+    # assert !result.success?
+    #     assert result.error?
+    #     assert result.error.error?
+    #     assert_equal 'ValidationError', result.error.code
   end
 end

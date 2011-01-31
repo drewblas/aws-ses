@@ -31,6 +31,12 @@ Use the following to send an e-mail:
                :subject   => 'Subject Line'
                :text_body => 'Internal text body'
 
+You can also send Mail objects using send_raw_email:
+
+  m = Mail.new( :to => ..., :from => ... )
+  ses.send_raw_email(m)
+
+send_raw_email will also take a hash and pass it through Mail.new automatically as well.
 
 
 == Addresses
@@ -60,6 +66,16 @@ Adds functionality for the statistics and info functionality
 
 You can call 'quota' or 'statistics'
 
+
+== Rails
+
+This gem is compatible with Rails.  Simply add this to your `config/environments/*.rb` as appropriate:
+
+    ses = AWS::SES::Base.new(
+      :access_key_id     => 'abc', 
+      :secret_access_key => '123'
+    )
+    config.action_mailer.deliver_method = ses
 
 == Source
 

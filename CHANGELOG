@@ -1,3 +1,8 @@
+0.3.0:
+* Added send_raw_email support
+* Added support for Rails3
+* Vastly improved error handling and got rid of a bunch of stuff that wasn't used
+
 0.2.0:
 * Added info support
 * Added send_email

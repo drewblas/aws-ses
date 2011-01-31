@@ -14,6 +14,16 @@
 
 <%= docs_for['AWS::SES::Info'] %>
 
+== Rails
+
+This gem is compatible with Rails.  Simply add this to your `config/environments/*.rb` as appropriate:
+
+    ses = AWS::SES::Base.new(
+      :access_key_id     => 'abc', 
+      :secret_access_key => '123'
+    )
+    config.action_mailer.deliver_method = ses
+
 == Source
 
 Available at: https://github.com/drewblas/aws-ses

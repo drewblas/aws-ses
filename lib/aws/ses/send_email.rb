@@ -9,6 +9,12 @@ module AWS
     #                :subject   => 'Subject Line'
     #                :text_body => 'Internal text body'
     #
+    # You can also send Mail objects using send_raw_email:
+    # 
+    #   m = Mail.new( :to => ..., :from => ... )
+    #   ses.send_raw_email(m)
+    #
+    # send_raw_email will also take a hash and pass it through Mail.new automatically as well.
     module SendEmail
       
       # Sends an email through SES
@@ -55,6 +61,27 @@ module AWS
         request('SendEmail', package)
       end
       
+      # Sends using the SendRawEmail method
+      # This gives the most control and flexibility
+      #
+      # This uses the underlying Mail object from the mail gem
+      # You can pass in a Mail object, a Hash of params that will be parsed by Mail.new, or just a string
+      # 
+      # Note that the params are different from send_email
+      # Specifically, the following fields from send_email will NOT work:
+      #
+      # * :source
+      # * :html_body
+      # * :text_body
+      #
+      # send_email accepts the aliases of :from & :body in order to be more compatible with the Mail gem
+      #
+      # This method is aliased as deliver and deliver! for compatibility (especially with Rails)
+      #
+      # @option mail [String] A raw string that is a properly formatted e-mail message
+      # @option mail [Hash] A hash that will be parsed by Mail.new
+      # @option mail [Mail] A mail object, ready to be encoded
+      # @return [Response]
       def send_raw_email(mail)
         message = mail.is_a?(Hash) ? Mail.new(mail).to_s : mail.to_s
         package = { 'RawMessage.Data' => Base64::encode64(message) }

@@ -55,14 +55,6 @@ module AWS
         request('SendEmail', package)
       end
 
-      def send_raw_email(options = {})
-        package = {}
-
-        package['RawMessage.Data'] = Base64::encode64(options[:raw]) if options[:raw]
-
-        request('SendRawEmail', package)
-      end
-
       private
 
       # Adds all elements of the ary with the appropriate member elements

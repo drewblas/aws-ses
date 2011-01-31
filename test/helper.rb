@@ -41,8 +41,8 @@ class Test::Unit::TestCase
       abort "Response data for mock connection must be a Hash or an Array. Was #{data.inspect}."
     end
     
-    connection = flexmock(Net::HTTP.new) do |mock|
-      mock.should_receive(:request).and_return(*return_values).at_least.once
+    connection = flexmock('Net::HTTP.new') do |mock|
+      mock.should_receive(:post).and_return(*return_values).at_least.once
     end
 
     mock = flexmock(object)

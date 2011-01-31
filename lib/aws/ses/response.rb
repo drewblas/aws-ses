@@ -42,7 +42,7 @@ module AWS
       end
 
       def error?
-        !success? && response['content-type'] == 'application/xml' && parsed.root == 'error'
+        !success? && response['content-type'] == 'application/xml'
       end
 
       def error
@@ -55,7 +55,7 @@ module AWS
 #        parse_options = { 'suppressempty' => nil, 'keeproot' => false }
 
         xml = XmlSimple.xml_in(body, parse_options)
-        xml["#{@action}Result"]
+        xml["#{@action}Result"] || xml
       end
       memoized :parsed
       

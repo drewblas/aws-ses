@@ -10,11 +10,11 @@ module AWS
     #                :text_body => 'Internal text body'
     #
     module SendEmail
-      
+
       # Sends an email through SES
-      # 
+      #
       # the destination parameters can be:
-      # 
+      #
       # [A single e-mail string]  "jon@example.com"
       # [A array of e-mail addresses]  ['jon@example.com', 'dave@example.com']
       #
@@ -38,25 +38,33 @@ module AWS
       # @return [Response] the response to sending this e-mail
       def send_email(options = {})
         package     = {}
-        
+
         package['Source'] = options[:source] || options[:from]
-        
+
         add_array_to_hash!(package, 'Destination.ToAddresses', options[:to]) if options[:to]
         add_array_to_hash!(package, 'Destination.CcAddresses', options[:cc]) if options[:cc]
         add_array_to_hash!(package, 'Destination.BccAddresses', options[:bcc]) if options[:bcc]
-        
+
         package['Message.Subject.Data'] = options[:subject]
-        
+
         package['Message.Body.Html.Data'] = options[:html_body] if options[:html_body]
         package['Message.Body.Text.Data'] = options[:text_body] || options[:body] if options[:text_body] || options[:body]
-        
+
         package['ReturnPath'] = options[:return_path] if options[:return_path]
-        
+
         request('SendEmail', package)
       end
-      
+
+      def send_raw_email(options = {})
+        package = {}
+
+        package['RawMessage.Data'] = Base64::encode64(options[:raw]) if options[:raw]
+
+        request('SendRawEmail', package)
+      end
+
       private
-      
+
       # Adds all elements of the ary with the appropriate member elements
       def add_array_to_hash!(hash, key, ary)
         cnt = 1
@@ -66,9 +74,9 @@ module AWS
         end
       end
     end
-    
+
     class SendEmailResponse < AWS::SES::Response
-      
+
     end
   end
 end

@@ -55,6 +55,15 @@ module AWS
         request('SendEmail', package)
       end
       
+      def send_raw_email(mail)
+        message = mail.is_a?(Hash) ? Mail.new(mail).to_s : mail.to_s
+        package = { 'RawMessage.Data' => Base64::encode64(message) }
+        request('SendRawEmail', package)
+      end
+
+      alias :deliver! :send_raw_email
+      alias :deliver  :send_raw_email
+      
       private
       
       # Adds all elements of the ary with the appropriate member elements
@@ -69,6 +78,10 @@ module AWS
     
     class SendEmailResponse < AWS::SES::Response
       
+    end
+    
+    class SendRawEmailResponse < AWS::SES::Response
+    
     end
   end
 end

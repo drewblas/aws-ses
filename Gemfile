@@ -16,3 +16,4 @@ end
 gem 'xml-simple'
 gem 'builder'
 gem 'mime-types'
+gem 'mail', '~> 2.2.15'

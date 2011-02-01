@@ -32,7 +32,7 @@ DEPENDENCIES
   bundler (~> 1.0.0)
   flexmock (~> 0.8.11)
   jeweler (~> 1.5.2)
-  mail (~> 2.2.15)
+  mail (~> 2.2.5)
   mime-types
   rcov
   shoulda-context

@@ -69,13 +69,21 @@ You can call 'quota' or 'statistics'
 
 == Rails
 
-This gem is compatible with Rails.  Simply add this to your `config/environments/*.rb` as appropriate:
+This gem is compatible with Rails >= 3.0.0
 
-    ses = AWS::SES::Base.new(
-      :access_key_id     => 'abc', 
+To use, first add the gem to your Gemfile:
+
+    gem "aws-ses", "~> 0.3.1", :require => 'aws/ses'
+
+Then, add your Amazon credentials and extend ActionMailer in `config/initializers/amazon_ses.rb`:
+
+    ActionMailer::Base.add_delivery_method :ses, AWS::SES::Base,
+      :access_key_id     => 'abc',
       :secret_access_key => '123'
-    )
-    config.action_mailer.deliver_method = ses
+
+Then set the delivery method in `config/environments/*rb` as appropriate:
+
+    config.action_mailer.delivery_method = :ses
 
 == Source
 

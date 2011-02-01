@@ -14,8 +14,8 @@ Gem::Specification.new do |s|
   s.email = %q{drew.blas@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
-    "README",
-    "README.erb",
+    "README.rdoc",
+    "CHANGELOG"
     "TODO"
   ]
   s.files = [
@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
     "Gemfile",
     "Gemfile.lock",
     "LICENSE",
-    "README",
+    "README.rdoc",
     "README.erb",
     "Rakefile",
     "TODO",

@@ -1,3 +1,6 @@
+0.3.1:
+* Downgraded mail gem version required to enhance Rails 3.0.0 compatibility
+
 0.3.0:
 * Added send_raw_email support
 * Added support for Rails3

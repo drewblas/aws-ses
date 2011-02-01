@@ -56,7 +56,7 @@ namespace :doc do
     version = File.exist?('VERSION') ? File.read('VERSION') : ""
     rdoc.title    = "AWS::SES -- Support for Amazon SES's REST api #{version}"  
     rdoc.options << '--line-numbers' << '--inline-source'
-    rdoc.rdoc_files.include('README')
+    rdoc.rdoc_files.include('README.rdoc')
     rdoc.rdoc_files.include('LICENSE')
     rdoc.rdoc_files.include('CHANGELOG')
     rdoc.rdoc_files.include('TODO')
@@ -81,7 +81,7 @@ namespace :doc do
       strip_comments[info.comment]
     end
     
-    open('README', 'w') do |file|
+    open('README.rdoc', 'w') do |file|
       file.write ERB.new(IO.read('README.erb')).result(binding)
     end
   end

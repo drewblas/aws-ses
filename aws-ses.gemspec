@@ -9,13 +9,13 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Drew Blas", "Marcel Molina Jr."]
-  s.date = %q{2011-02-01}
+  s.date = %q{2011-02-02}
   s.description = %q{Client library for Amazon's Simple Email Service's REST API}
   s.email = %q{drew.blas@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
+    "README.erb",
     "README.rdoc",
-    "CHANGELOG"
     "TODO"
   ]
   s.files = [
@@ -24,8 +24,8 @@ Gem::Specification.new do |s|
     "Gemfile",
     "Gemfile.lock",
     "LICENSE",
-    "README.rdoc",
     "README.erb",
+    "README.rdoc",
     "Rakefile",
     "TODO",
     "VERSION",
@@ -38,6 +38,7 @@ Gem::Specification.new do |s|
     "lib/aws/ses/response.rb",
     "lib/aws/ses/send_email.rb",
     "lib/aws/ses/version.rb",
+    "test/address_test.rb",
     "test/base_test.rb",
     "test/extensions_test.rb",
     "test/fixtures.rb",
@@ -49,9 +50,10 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/drewblas/aws-ses}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.4.2}
+  s.rubygems_version = %q{1.5.0}
   s.summary = %q{Client library for Amazon's Simple Email Service's REST API}
   s.test_files = [
+    "test/address_test.rb",
     "test/base_test.rb",
     "test/extensions_test.rb",
     "test/fixtures.rb",

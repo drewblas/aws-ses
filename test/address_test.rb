@@ -63,7 +63,7 @@ class AddressTest < Test::Unit::TestCase
         </DeleteVerifiedEmailAddressResponse>
       })
       
-      result = @base.addresses.list
+      result = @base.addresses.delete('user1@example.com')
 
       assert result.success?
       assert_equal 'abc-123', result.request_id

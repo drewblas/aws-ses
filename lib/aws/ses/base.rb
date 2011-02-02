@@ -127,8 +127,8 @@ module AWS #:nodoc:
       # allow us to have a one line call in each method which will do all of the work
       # in making the actual request to AWS.
       def request(action, params = {})
-        # remove any keys that have nil or empty values
-        params.reject! { |key, value| value.nil? or value.empty?}
+        # Use a copy so that we don't modify the caller's Hash, remove any keys that have nil or empty values         
+        params = params.reject { |key, value| value.nil? or value.empty?}
         
         timestamp = Time.now.getutc
 

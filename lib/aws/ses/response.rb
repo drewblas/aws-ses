@@ -54,8 +54,7 @@ module AWS
         parse_options = { 'forcearray' => ['item', 'member'], 'suppressempty' => nil, 'keeproot' => false }
 #        parse_options = { 'suppressempty' => nil, 'keeproot' => false }
 
-        xml = XmlSimple.xml_in(body, parse_options)
-        xml["#{@action}Result"] || xml
+        XmlSimple.xml_in(body, parse_options)
       end
       memoized :parsed
       
@@ -64,8 +63,12 @@ module AWS
         parsed
       end
 
+      def request_id
+        error? ? parsed['RequestId'] : parsed['ResponseMetadata']['RequestId']
+      end
+
       def inspect
-        "#<%s:0x%s %s %s>" % [self.class, object_id, response.code, response.message]
+        "#<%s:0x%s %s %s %s>" % [self.class, object_id, request_id, response.code, response.message]
       end
     end  # class Response
     
@@ -99,7 +102,7 @@ module AWS
       end
     
       def inspect
-        "#<%s:0x%s %s '%s'>" % [self.class.name, object_id, code, message]
+        "#<%s:0x%s %s %s '%s'>" % [self.class.name, object_id, response.request_id, code, message]
       end
     end
   end # module SES

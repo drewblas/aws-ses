@@ -102,12 +102,20 @@ module AWS
         end
       end
     end
-    
-    class SendEmailResponse < AWS::SES::Response
+
+    class EmailResponse < AWS::SES::Response   
+      def result
+        super["#{action}Result"]["MessageId"]
+      end  
       
+      alias :message_id :result
     end
-    
-    class SendRawEmailResponse < AWS::SES::Response
+
+    class SendEmailResponse <  EmailResponse
+
+    end
+        
+    class SendRawEmailResponse < EmailResponse
     
     end
   end

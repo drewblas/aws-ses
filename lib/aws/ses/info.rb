@@ -18,6 +18,7 @@ module AWS
     end
     
     class GetSendQuotaResponse < AWS::SES::Response
+      
     end
     
     class GetSendStatisticsResponse < AWS::SES::Response

@@ -5,17 +5,17 @@
 
 Gem::Specification.new do |s|
   s.name = %q{aws-ses}
-  s.version = "0.3.1"
+  s.version = "0.3.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Drew Blas", "Marcel Molina Jr."]
-  s.date = %q{2011-02-01}
+  s.date = %q{2011-02-03}
   s.description = %q{Client library for Amazon's Simple Email Service's REST API}
   s.email = %q{drew.blas@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
+    "README.erb",
     "README.rdoc",
-    "CHANGELOG"
     "TODO"
   ]
   s.files = [
@@ -24,8 +24,8 @@ Gem::Specification.new do |s|
     "Gemfile",
     "Gemfile.lock",
     "LICENSE",
-    "README.rdoc",
     "README.erb",
+    "README.rdoc",
     "Rakefile",
     "TODO",
     "VERSION",

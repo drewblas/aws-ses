@@ -1,30 +1,4 @@
 #:stopdoc:
-
-class Hash
-  def to_query_string(include_question_mark = true)
-    query_string = ''
-    unless empty?
-      query_string << '?' if include_question_mark
-      query_string << inject([]) do |params, (key, value)| 
-        params << "#{key}=#{value}" 
-      end.join('&')
-    end
-    query_string
-  end
-  
-  def to_normalized_options
-    # Convert all option names to downcased strings, and replace underscores with hyphens
-    inject({}) do |normalized_options, (name, value)|
-      normalized_options[name.to_header] = value.to_s
-      normalized_options
-    end
-  end
-  
-  def to_normalized_options!
-    replace(to_normalized_options)
-  end
-end
-
 class String
   if RUBY_VERSION <= '1.9'
     def previous!
@@ -90,34 +64,6 @@ class String
   end
 end
 
-class CoercibleString < String
-  class << self
-    def coerce(string)
-      new(string).coerce
-    end
-  end
-  
-  def coerce
-    case self
-    when 'true';         true
-    when 'false';         false
-    # Don't coerce numbers that start with zero
-    when  /^[1-9]+\d*$/;   Integer(self)
-    when datetime_format; Time.parse(self)
-    else
-      self
-    end
-  end
-  
-  private
-    # Lame hack since Date._parse is so accepting. S3 dates are of the form: '2006-10-29T23:14:47.000Z'
-    # so unless the string looks like that, don't even try, otherwise it might convert an object's
-    # key from something like '03 1-2-3-Apple-Tree.mp3' to Sat Feb 03 00:00:00 CST 2001.
-    def datetime_format
-      /^\d{4}-\d{2}-\d{2}\w\d{2}:\d{2}:\d{2}/
-    end
-end
-
 class Symbol
   def to_header
     to_s.to_header
@@ -161,13 +107,6 @@ module Kernel
   end
 end
 
-class Object
-  def returning(value)
-    yield(value)
-    value
-  end
-end
-
 class Module
   def memoized(method_name)
     original_method = "unmemoized_#{method_name}_#{Time.now.to_i}"
@@ -189,114 +128,6 @@ class Module
           #{name.to_s}
         end
       EVAL
-    end
-  end
-  
-  # Transforms MarcelBucket into
-  #
-  #   class MarcelBucket < AWS::S3::Bucket
-  #     set_current_bucket_to 'marcel'
-  #   end
-  def const_missing_from_s3_library(sym)
-    if sym.to_s =~ /^(\w+)(Bucket|S3Object)$/
-      const = const_set(sym, Class.new(AWS::S3.const_get($2)))
-      const.current_bucket = $1.underscore
-      const
-    else
-      const_missing_not_from_s3_library(sym)
-    end
-  end
-  alias_method :const_missing_not_from_s3_library, :const_missing
-  alias_method :const_missing, :const_missing_from_s3_library
-end
-
-
-class Class # :nodoc:
-  def cattr_reader(*syms)
-    syms.flatten.each do |sym|
-      class_eval(<<-EOS, __FILE__, __LINE__)
-        unless defined? @@#{sym}
-          @@#{sym} = nil
-        end
-
-        def self.#{sym}
-          @@#{sym}
-        end
-
-        def #{sym}
-          @@#{sym}
-        end
-      EOS
-    end
-  end
-
-  def cattr_writer(*syms)
-    syms.flatten.each do |sym|
-      class_eval(<<-EOS, __FILE__, __LINE__)
-        unless defined? @@#{sym}
-          @@#{sym} = nil
-        end
-
-        def self.#{sym}=(obj)
-          @@#{sym} = obj
-        end
-
-        def #{sym}=(obj)
-          @@#{sym} = obj
-        end
-      EOS
-    end
-  end
-
-  def cattr_accessor(*syms)
-    cattr_reader(*syms)
-    cattr_writer(*syms)
-  end
-end if Class.instance_methods(false).grep(/^cattr_(?:reader|writer|accessor)$/).empty?
-
-module SelectiveAttributeProxy
-  def self.included(klass)
-    klass.extend(ClassMethods)
-    klass.class_eval(<<-EVAL, __FILE__, __LINE__)
-      cattr_accessor :attribute_proxy
-      cattr_accessor :attribute_proxy_options
-      
-      # Default name for attribute storage
-      self.attribute_proxy         = :attributes
-      self.attribute_proxy_options = {:exclusively => true}
-      
-      private
-        # By default proxy all attributes
-        def proxiable_attribute?(name)
-          return true unless self.class.attribute_proxy_options[:exclusively]
-          send(self.class.attribute_proxy).has_key?(name)
-        end
-        
-        def method_missing(method, *args, &block)
-          # Autovivify attribute storage
-          if method == self.class.attribute_proxy
-            ivar = "@\#{method}"
-            instance_variable_set(ivar, {}) unless instance_variable_get(ivar).is_a?(Hash)
-            instance_variable_get(ivar)
-          # Delegate to attribute storage
-          elsif method.to_s =~ /^(\\w+)(=?)$/ && proxiable_attribute?($1)
-            attributes_hash_name = self.class.attribute_proxy
-            $2.empty? ? send(attributes_hash_name)[$1] : send(attributes_hash_name)[$1] = args.first
-          else
-            super
-          end
-        end
-    EVAL
-  end
-  
-  module ClassMethods
-    def proxy_to(attribute_name, options = {})
-      if attribute_name.is_a?(Hash)
-        options = attribute_name
-      else
-        self.attribute_proxy = attribute_name
-      end
-      self.attribute_proxy_options = options
     end
   end
 end

@@ -1,3 +1,6 @@
+0.3.2:
+* Removed unused extensions that were conflicting with S3
+
 0.3.1:
 * Downgraded mail gem version required to enhance Rails 3.0.0 compatibility
 

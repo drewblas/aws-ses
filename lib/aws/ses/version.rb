@@ -2,8 +2,8 @@ module AWS
   module SES
     module VERSION #:nodoc:
       MAJOR    = '0'
-      MINOR    = '3'
-      TINY     = '2' 
+      MINOR    = '4'
+      TINY     = '0' 
       BETA     = Time.now.to_i.to_s
     end
     

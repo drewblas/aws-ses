@@ -1,3 +1,10 @@
+0.4.0:
+* This version may have some small incompatibilities due to adding support for MessageId.  Check that the result still matches what you previously expected.
+* Added MessageId support in responses
+* Improved resulting data from many responses
+* Added tests and documentation for quota and statistics
+* Added Rails 2.3.x support ( I HOPE!!! )
+
 0.3.2:
 * Removed unused extensions that were conflicting with S3
 

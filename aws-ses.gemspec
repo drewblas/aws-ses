@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{aws-ses}
-  s.version = "0.3.2"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Drew Blas", "Marcel Molina Jr."]
-  s.date = %q{2011-02-03}
+  s.date = %q{2011-02-09}
   s.description = %q{Client library for Amazon's Simple Email Service's REST API}
   s.email = %q{drew.blas@gmail.com}
   s.extra_rdoc_files = [
@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
     "TODO",
     "VERSION",
     "aws-ses.gemspec",
+    "lib/aws/actionmailer/ses_extension.rb",
     "lib/aws/ses.rb",
     "lib/aws/ses/addresses.rb",
     "lib/aws/ses/base.rb",
@@ -38,10 +39,12 @@ Gem::Specification.new do |s|
     "lib/aws/ses/response.rb",
     "lib/aws/ses/send_email.rb",
     "lib/aws/ses/version.rb",
+    "test/address_test.rb",
     "test/base_test.rb",
     "test/extensions_test.rb",
     "test/fixtures.rb",
     "test/helper.rb",
+    "test/info_test.rb",
     "test/mocks/fake_response.rb",
     "test/response_test.rb",
     "test/send_email_test.rb"
@@ -52,10 +55,12 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.4.2}
   s.summary = %q{Client library for Amazon's Simple Email Service's REST API}
   s.test_files = [
+    "test/address_test.rb",
     "test/base_test.rb",
     "test/extensions_test.rb",
     "test/fixtures.rb",
     "test/helper.rb",
+    "test/info_test.rb",
     "test/mocks/fake_response.rb",
     "test/response_test.rb",
     "test/send_email_test.rb"

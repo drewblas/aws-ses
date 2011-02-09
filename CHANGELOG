@@ -1,3 +1,7 @@
+0.4.1:
+* Removed many unneeded monkeypatch extensions
+* Tests ( and gem ) run in 1.9.2
+
 0.4.0:
 * This version may have some small incompatibilities due to adding support for MessageId.  Check that the result still matches what you previously expected.
 * Added MessageId support in responses

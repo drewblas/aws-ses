@@ -1,4 +1,5 @@
-require File.dirname(__FILE__) + '/helper'
+require File.expand_path('../helper', __FILE__)
+
 class BaseResponseTest < Test::Unit::TestCase 
   def setup
     @headers       = {'content-type' => 'text/plain', 'date' => Time.now}

@@ -21,11 +21,33 @@ module AWS
       def result
         parsed['GetSendQuotaResult']
       end
+      
+      def sent_last_24_hours
+        result['SentLast24Hours']
+      end
+      
+      def max_24_hour_send
+        result['Max24HourSend']
+      end
+      
+      def max_send_rate
+        result['MaxSendRate']
+      end
     end
     
     class GetSendStatisticsResponse < AWS::SES::Response
       def result
-        parsed['GetSendStatisticsResponse']
+        if members = parsed['GetSendStatisticsResult']['SendDataPoints']
+          [members['member']].flatten
+        else
+          []
+        end
+      end
+      
+      memoized :result
+      
+      def data_points
+        result
       end
     end
   end

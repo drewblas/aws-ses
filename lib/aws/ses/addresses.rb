@@ -53,6 +53,7 @@ module AWS
           []
         end
       end
+      memoized :result
     end
     
     class VerifyEmailAddressResponse < AWS::SES::Response

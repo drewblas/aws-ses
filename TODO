@@ -1,1 +1,3 @@
 * Use a better XML parser (and be consistent)
+* Rename Base to something else (probably Mailer):  Nothing else actually inherits from Base, so that is a very poor naming convention.  I intend to change it in the future
+* Integer responses should probably be cast to ints instead of left as strings

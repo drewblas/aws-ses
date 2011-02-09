@@ -100,29 +100,6 @@ class ModuleExtensionsTest < Test::Unit::TestCase
     assert_equal new_cache, @instance.send(:instance_variable_get, :@quux)
   end
   
-  def test_constant_setting
-    some_module = Module.new
-    assert !some_module.const_defined?(:FOO)
-    assert_nothing_raised do
-      some_module.constant :FOO, 'bar'
-    end
-    
-    assert some_module.const_defined?(:FOO)
-    assert_nothing_raised do
-      some_module::FOO
-      some_module.foo
-    end
-    assert_equal 'bar', some_module::FOO
-    assert_equal 'bar', some_module.foo
-    
-    assert_nothing_raised do
-      some_module.constant :FOO, 'baz'
-    end
-    
-    assert_equal 'bar', some_module::FOO
-    assert_equal 'bar', some_module.foo
-  end
-  
   private
     # For 1.9 compatibility
     def instance_variables_of(object)

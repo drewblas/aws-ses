@@ -67,13 +67,9 @@ Adds functionality for the statistics and info functionality
 You can call 'quota' or 'statistics'
 
 
-== Rails
+== For Rails >= 3.0.0
 
-This gem is compatible with Rails >= 3.0.0
-
-To use, first add the gem to your Gemfile:
-
-    gem "aws-ses", "~> 0.3.1", :require => 'aws/ses'
+script/plugin install git://github.com/nathanbertram/aws-ses.git
 
 Then, add your Amazon credentials and extend ActionMailer in `config/initializers/amazon_ses.rb`:
 
@@ -84,6 +80,15 @@ Then, add your Amazon credentials and extend ActionMailer in `config/initializer
 Then set the delivery method in `config/environments/*rb` as appropriate:
 
     config.action_mailer.delivery_method = :ses
+
+== For Rails >= 2.3.x
+
+script/plugin install git://github.com/nathanbertram/aws-ses.git
+
+    config.after_initialize do
+      ActionMailer::Base.delivery_method = :amazon_ses
+      ActionMailer::Base.custom_amazon_ses_mailer = AWS::SES::Base.new(:secret_access_key => S3_CONFIG[:secret_access_key], :access_key_id => S3_CONFIG[:access_key_id])
+    end
 
 == Source
 

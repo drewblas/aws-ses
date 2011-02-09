@@ -82,7 +82,7 @@ Then set the delivery method in `config/environments/*rb` as appropriate:
 
     config.action_mailer.delivery_method = :ses
 
-== For Rails >= 2.3.x
+== For Rails 2.3.x
 
 To use, first add the gem to your Gemfile:
     gem "aws-ses", "~> 0.3.1", :require => 'aws/ses'

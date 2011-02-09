@@ -69,7 +69,8 @@ You can call 'quota' or 'statistics'
 
 == For Rails >= 3.0.0
 
-script/plugin install git://github.com/nathanbertram/aws-ses.git
+To use, first add the gem to your Gemfile:
+    gem "aws-ses", "~> 0.3.1", :require => 'aws/ses'
 
 Then, add your Amazon credentials and extend ActionMailer in `config/initializers/amazon_ses.rb`:
 
@@ -83,7 +84,8 @@ Then set the delivery method in `config/environments/*rb` as appropriate:
 
 == For Rails >= 2.3.x
 
-script/plugin install git://github.com/nathanbertram/aws-ses.git
+To use, first add the gem to your Gemfile:
+    gem "aws-ses", "~> 0.3.1", :require => 'aws/ses'
 
     config.after_initialize do
       ActionMailer::Base.delivery_method = :amazon_ses

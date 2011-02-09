@@ -87,6 +87,8 @@ Then set the delivery method in `config/environments/*rb` as appropriate:
 To use, first add the gem to your Gemfile:
     gem "aws-ses", "~> 0.3.1", :require => 'aws/ses'
 
+Then set the delivery method in `config/environments/*rb` as appropriate:
+
     config.after_initialize do
       ActionMailer::Base.delivery_method = :amazon_ses
       ActionMailer::Base.custom_amazon_ses_mailer = AWS::SES::Base.new(:secret_access_key => S3_CONFIG[:secret_access_key], :access_key_id => S3_CONFIG[:access_key_id])

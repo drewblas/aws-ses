@@ -1,40 +1,5 @@
 require File.dirname(__FILE__) + '/helper'
 
-class StringExtensionsTest < Test::Unit::TestCase
-  def test_previous
-    expectations = {'abc' => 'abb', '123' => '122', '1' => '0'}
-    expectations.each do |before, after|
-      assert_equal after, before.previous
-    end
-  end
-  
-  def test_to_header
-    transformations = {
-      'foo'     => 'foo',
-      :foo      => 'foo',
-      'foo-bar' => 'foo-bar',
-      'foo_bar' => 'foo-bar',
-      :foo_bar  => 'foo-bar',
-      'Foo-Bar' => 'foo-bar',
-      'Foo_Bar' => 'foo-bar'
-    }
-    
-    transformations.each do |before, after|
-      assert_equal after, before.to_header
-    end
-  end
-  
-  def test_valid_utf8?
-    assert !"318597/620065/GTL_75\24300_A600_A610.zip".valid_utf8?
-    assert "318597/620065/GTL_75£00_A600_A610.zip".valid_utf8?
-  end
-  
-  def test_remove_extended
-    assert "318597/620065/GTL_75\24300_A600_A610.zip".remove_extended.valid_utf8?
-    assert "318597/620065/GTL_75£00_A600_A610.zip".remove_extended.valid_utf8?
-  end
-end
-
 class KerneltExtensionsTest < Test::Unit::TestCase
   class Foo
     def foo

@@ -11,7 +11,7 @@ module ActionMailer
     cattr_accessor :custom_amazon_ses_mailer
     
     def perform_delivery_amazon_ses(mail)
-      raise 'AmazonSes::Mailer has not been intitialized.' unless @@custom_amazon_ses_mailer
+      raise 'AWS::SES::Base has not been intitialized.' unless @@custom_amazon_ses_mailer
       @@custom_amazon_ses_mailer.deliver!(mail)
     end
 

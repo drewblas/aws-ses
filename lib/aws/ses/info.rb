@@ -18,9 +18,15 @@ module AWS
     end
     
     class GetSendQuotaResponse < AWS::SES::Response
+      def result
+        parsed['GetSendQuotaResult']
+      end
     end
     
     class GetSendStatisticsResponse < AWS::SES::Response
+      def result
+        parsed['GetSendStatisticsResponse']
+      end
     end
   end
 end

@@ -47,7 +47,7 @@ module AWS
     
     class ListVerifiedEmailAddressesResponse < AWS::SES::Response
       def result
-        if members = parsed['VerifiedEmailAddresses']
+        if members = parsed['ListVerifiedEmailAddressesResult']['VerifiedEmailAddresses']
           [members['member']].flatten
         else
           []

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/helper'
 
 class SendEmailTest < Test::Unit::TestCase
-  context "when sending email" do
+  context 'when sending email' do
     setup do
       @base = generate_base
       @basic_email = { :from => 'jon@example.com', 
@@ -10,7 +10,7 @@ class SendEmailTest < Test::Unit::TestCase
                         :text_body => 'Body1' }
     end
     
-    context "adding to a hash" do
+    context 'adding to a hash' do
       should 'add array elements to the hash' do
         hash = {}
         ary  = ['x', 'y']
@@ -28,41 +28,40 @@ class SendEmailTest < Test::Unit::TestCase
       end
     end
     
-    should "send an e-mail" do
-      mock_connection(@base)
+    should 'send an e-mail' do
+      mock_connection(@base, :body => %{
+        <SendEmailResponse xmlns="http://ses.amazonaws.com/doc/2010-12-01/">
+          <SendEmailResult>
+            <MessageId>abc-123</MessageId>
+          </SendEmailResult>
+          <ResponseMetadata>
+            <RequestId>xyz-123</RequestId>
+          </ResponseMetadata>
+        </SendEmailResponse>
+      })
       
       result = @base.send_email @basic_email
       assert result.success?
-    end
-    
-    should 'send a raw e-mail with a mail object' do
-      mock_connection(@base, {:body => %{
-        <SendRawEmailRequest>
-          <SendRawEmailResponse>
-            <MessageId>abc-123</MessageId>
-          </SendRawEmailResponse>
-        </SendRawEmailRequest>
-      }})
-      
-      mail = Mail.new @basic_email
-      
-      result = @base.send_raw_email(mail)
-      
-      assert result.success?
+      assert_equal 'abc-123', result.message_id
+      assert_equal 'xyz-123', result.request_id
     end
     
     should 'send a raw e-mail with a hash object' do
-      mock_connection(@base, {:body => %{
-        <SendRawEmailRequest>
-          <SendRawEmailResponse>
+      mock_connection(@base, :body => %{
+        <SendRawEmailResponse xmlns="http://ses.amazonaws.com/doc/2010-12-01/">
+          <SendRawEmailResult>
             <MessageId>abc-123</MessageId>
-          </SendRawEmailResponse>
-        </SendRawEmailRequest>
-      }})
+          </SendRawEmailResult>
+          <ResponseMetadata>
+            <RequestId>xyz-123</RequestId>
+          </ResponseMetadata>
+        </SendRawEmailResponse>
+      })
       
       result = @base.send_raw_email(@basic_email)
-      
       assert result.success?
+      assert_equal 'abc-123', result.message_id
+      assert_equal 'xyz-123', result.request_id
     end
   end
 end

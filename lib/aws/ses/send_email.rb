@@ -103,11 +103,21 @@ module AWS
       end
     end
     
-    class SendEmailResponse < AWS::SES::Response
+    class EmailResponse < AWS::SES::Response
+      def result
+        super["#{action}Result"]
+      end
       
+      def message_id
+        result['MessageId']
+      end
     end
     
-    class SendRawEmailResponse < AWS::SES::Response
+    class SendEmailResponse < EmailResponse
+    
+    end
+    
+    class SendRawEmailResponse < EmailResponse
     
     end
   end

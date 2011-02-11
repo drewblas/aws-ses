@@ -9,7 +9,7 @@ module AWS
     # == Get the quota information
     #   response = ses.quota
     #   # How many e-mails you've sent in the last 24 hours
-    #   response.send_last_24_hours
+    #   response.sent_last_24_hours
     #   # How many e-mails you're allowed to send in 24 hours
     #   response.max_24_hour_send
     #   # How many e-mails you can send per second

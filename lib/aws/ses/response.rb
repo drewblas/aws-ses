@@ -73,18 +73,20 @@ module AWS
     end  # class Response
     
     # Requests whose response code is between 300 and 599 and contain an <Error></Error> in their body
-    # are wrapped in an Error::Response. This Error::Response contains an Error object which raises an exception
-    # that corresponds to the error in the response body. The exception object contains the ErrorResponse, so
-    # in all cases where a request happens, you can rescue ResponseError and have access to the ErrorResponse and
-    # its Error object which contains information about the ResponseError.
+    # are wrapped in an ResponseError. The ResponseError object contains the Response so you can rescue
+    # the ResponseError and have access to the underlying Response.
     #
     #   begin
-    #     Bucket.create(..)
+    #     @ses.send_email(...)
     #   rescue ResponseError => exception
+    #    # exception.code
+    #    # => HTTP Response Code
+    #    # exception.message
+    #    # => "AWS Response Code & Error Message"
     #    exception.response
-    #    # => <Error::Response>
+    #    # => <SendEmailResponse>
     #    exception.response.error
-    #    # => <Error>
+    #    # => "Error Message"
     #   end
     class ResponseError < StandardError
       attr_reader :response
@@ -98,7 +100,7 @@ module AWS
       end
       
       def message
-        @response.error['Code'] + @response.error['Message']
+        "#{@response.error['Code']} #{@response.error['Message']}"
       end
     
       def inspect

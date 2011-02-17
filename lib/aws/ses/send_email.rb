@@ -5,9 +5,9 @@ module AWS
     #
     #   ses = AWS::SES::Base.new( ... connection info ... )
     #   ses.send_email :to        => ['jon@example.com', 'dave@example.com'],
-    #                :source    => 'steve@example.com',
-    #                :subject   => 'Subject Line'
-    #                :text_body => 'Internal text body'
+    #                  :source    => 'steve@example.com',
+    #                  :subject   => 'Subject Line'
+    #                  :text_body => 'Internal text body'
     #
     # You can also send Mail objects using send_raw_email:
     # 
@@ -15,6 +15,14 @@ module AWS
     #   ses.send_raw_email(m)
     #
     # send_raw_email will also take a hash and pass it through Mail.new automatically as well.
+    # 
+    # By default, the email "from" display address is whatever is before the @. In the example above, 
+    # that would be "steve". To change the display from, use the format "Steve Smith" <steve@example.com>. For example:
+    #
+    #  ses.send_email :to        => ['jon@example.com', 'dave@example.com'],
+    #                 :source    => "\"Steve Smith\" <steve@example.com>",
+    #                 :subject   => 'Subject Line'
+    #                 :text_body => 'Internal text body'
     module SendEmail
       
       # Sends an email through SES

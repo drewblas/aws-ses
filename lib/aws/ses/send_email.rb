@@ -5,9 +5,14 @@ module AWS
     #
     #   ses = AWS::SES::Base.new( ... connection info ... )
     #   ses.send_email :to        => ['jon@example.com', 'dave@example.com'],
-    #                :source    => 'steve@example.com',
+    #                :source    => '"Steve Smith" <steve@example.com>',
     #                :subject   => 'Subject Line'
     #                :text_body => 'Internal text body'
+    #
+    # By default, the email "from" display address is whatever is before the @. 
+    # To change the display from, use the format: 
+    #
+    #   "Steve Smith" <steve@example.com>
     #
     # You can also send Mail objects using send_raw_email:
     # 
@@ -15,6 +20,7 @@ module AWS
     #   ses.send_raw_email(m)
     #
     # send_raw_email will also take a hash and pass it through Mail.new automatically as well.
+    #
     module SendEmail
       
       # Sends an email through SES
@@ -27,7 +33,7 @@ module AWS
       # ---
       # = "Email address is not verified.MessageRejected (AWS::Error)"
       # If you are receiving this message and you HAVE verified the [source] please <b>check to be sure you are not in sandbox mode!</b>
-      # If you have not been granted production access, you will have to <b>verify all recipients</b as well.
+      # If you have not been granted production access, you will have to <b>verify all recipients</b> as well.
       # http://docs.amazonwebservices.com/ses/2010-12-01/DeveloperGuide/index.html?InitialSetup.Customer.html
       # ---
       #

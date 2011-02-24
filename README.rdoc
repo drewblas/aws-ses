@@ -27,9 +27,14 @@ Use the following to send an e-mail:
 
   ses = AWS::SES::Base.new( ... connection info ... )
   ses.send_email :to        => ['jon@example.com', 'dave@example.com'],
-               :source    => 'steve@example.com',
+               :source    => '"Steve Smith" <steve@example.com>',
                :subject   => 'Subject Line'
                :text_body => 'Internal text body'
+
+By default, the email "from" display address is whatever is before the @. 
+To change the display from, use the format: 
+
+  "Steve Smith" <steve@example.com>
 
 You can also send Mail objects using send_raw_email:
 
@@ -37,6 +42,7 @@ You can also send Mail objects using send_raw_email:
   ses.send_raw_email(m)
 
 send_raw_email will also take a hash and pass it through Mail.new automatically as well.
+
 
 
 == Addresses
@@ -140,6 +146,24 @@ Then set the delivery method in `config/environments/*rb` as appropriate:
       ActionMailer::Base.delivery_method = :amazon_ses
       ActionMailer::Base.custom_amazon_ses_mailer = AWS::SES::Base.new(:secret_access_key => 'abc', :access_key_id => '123')
     end
+    
+== Issues
+
+=== HTTP Segmentation fault
+
+If you get this error:
+    net/http.rb:677: [BUG] Segmentation fault
+
+It means that you are not running with SSL enabled in ruby.  Re-compile ruby with ssl support or add this option to your environment:
+    RUBYOPT="-r openssl"
+    
+=== Rejected sending
+
+If you are receiving this message and you HAVE verified the [source] please <b>check to be sure you are not in sandbox mode!</b>
+    "Email address is not verified.MessageRejected (AWS::Error)"
+If you have not been granted production access, you will have to <b>verify all recipients</b> as well.
+  
+http://docs.amazonwebservices.com/ses/2010-12-01/DeveloperGuide/index.html?InitialSetup.Customer.html
 
 == Source
 
@@ -168,3 +192,4 @@ Special thanks to Marcel Molina Jr. for his creation of AWS::S3 which I used por
 * croaky
 * nathanbertram
 * sshaw
+* teeparham (documentation)

@@ -46,6 +46,7 @@ module AWS
       # @option options [String] :html_body
       # @option options [String] :text_body
       # @option options [String] :return_path The email address to which bounce notifications are to be forwarded. If the message cannot be delivered to the recipient, then an error message will be returned from the recipient's ISP; this message will then be forwarded to the email address specified by the ReturnPath parameter.
+      # @option options [String] :reply_to The reploy-to email address(es) for the message.  If the recipient replies to the message, each reply-to address will receive the reply.
       # @option options
       # @return [Response] the response to sending this e-mail
       def send_email(options = {})
@@ -63,6 +64,8 @@ module AWS
         package['Message.Body.Text.Data'] = options[:text_body] || options[:body] if options[:text_body] || options[:body]
         
         package['ReturnPath'] = options[:return_path] if options[:return_path]
+        
+        add_array_to_hash!(package, 'ReplyToAddresses', options[:reply_to]) if options[:reply_to]
         
         request('SendEmail', package)
       end
@@ -87,10 +90,21 @@ module AWS
       # @option mail [String] A raw string that is a properly formatted e-mail message
       # @option mail [Hash] A hash that will be parsed by Mail.new
       # @option mail [Mail] A mail object, ready to be encoded
+      # @option args [String] :source The sender's email address
+      # @option args [String] :destinations A list of destinations for the message.
+      # @option args [String] :from alias for :source
+      # @option args [String] :to alias for :destinations
       # @return [Response]
-      def send_raw_email(mail)
+      def send_raw_email(mail, args)
         message = mail.is_a?(Hash) ? Mail.new(mail).to_s : mail.to_s
         package = { 'RawMessage.Data' => Base64::encode64(message) }
+        package['Source'] = args[:from] if args[:from]
+        package['Source'] = args[:source] if args[:source]
+        if args[:destinations]
+            add_array_to_hash!(package, 'Destinations', args[:destinations])
+        else
+            add_array_to_hash!(package, 'Destinations', args[:to]) if args[:to]
+        end
         request('SendRawEmail', package)
       end
 

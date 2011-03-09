@@ -23,6 +23,8 @@ module AWS #:nodoc:
     
     DEFAULT_HOST = 'email.us-east-1.amazonaws.com'
     
+    USER_AGENT = 'github-aws-ses-ruby-gem'
+    
     # Encodes the given string with the secret_access_key by taking the
     # hmac-sha1 sum, and then base64 encoding it.  Optionally, it will also
     # url encode the result of that to protect the string if it's going to
@@ -66,6 +68,7 @@ module AWS #:nodoc:
       # @option options [Boolean] :use_ssl (true) Connect using SSL?
       # @option options [String] :server ("email.us-east-1.amazonaws.com") The server API endpoint host
       # @option options [String] :proxy_server (nil) An HTTP proxy server FQDN
+      # @option options [String] :user_agent ("github-aws-ses-ruby-gem") The HTTP User-Agent header value
       # @return [Object] the object.
       def initialize( options = {} )
 
@@ -74,6 +77,7 @@ module AWS #:nodoc:
                     :use_ssl => true,
                     :server => DEFAULT_HOST,
                     :path => "/",
+                    :user_agent => USER_AGENT,
                     :proxy_server => nil
                     }.merge(options)
 
@@ -81,6 +85,7 @@ module AWS #:nodoc:
         @proxy_server = options[:proxy_server]
         @use_ssl = options[:use_ssl]
         @path = options[:path]
+        @user_agent = options[:user_agent]
 
         raise ArgumentError, "No :access_key_id provided" if options[:access_key_id].nil? || options[:access_key_id].empty?
         raise ArgumentError, "No :secret_access_key provided" if options[:secret_access_key].nil? || options[:secret_access_key].empty?
@@ -147,7 +152,7 @@ module AWS #:nodoc:
 
         req['X-Amzn-Authorization'] = get_aws_auth_param(timestamp.httpdate, @secret_access_key)
         req['Date'] = timestamp.httpdate
-        req['User-Agent'] = "github-aws-ses-ruby-gem"
+        req['User-Agent'] = @user_agent 
 
         response = connection.post(@path, query, req)
         

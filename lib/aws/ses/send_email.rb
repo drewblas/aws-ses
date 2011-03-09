@@ -95,7 +95,7 @@ module AWS
       # @option args [String] :from alias for :source
       # @option args [String] :to alias for :destinations
       # @return [Response]
-      def send_raw_email(mail, args)
+      def send_raw_email(mail, args = {})
         message = mail.is_a?(Hash) ? Mail.new(mail).to_s : mail.to_s
         package = { 'RawMessage.Data' => Base64::encode64(message) }
         package['Source'] = args[:from] if args[:from]

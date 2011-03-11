@@ -1,3 +1,8 @@
+0.4.2:
+* Added support for ReplyToAddresses, Destinations, and Source (pzb)
+* Added custom User-Agent header (pzb)
+* Widespread doc updates
+
 0.4.1:
 * Removed many unneeded monkeypatch extensions
 * Tests ( and gem ) run in 1.9.2

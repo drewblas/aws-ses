@@ -21,13 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = gem.summary
   gem.email = "drew.blas@gmail.com"
   gem.authors = ["Drew Blas", 'Marcel Molina Jr.']
-  # Include your dependencies below. Runtime dependencies are required when using your gem,
-  # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
-  #  gem.add_runtime_dependency 'jabber4r', '> 0.1'
-  #  gem.add_development_dependency 'rspec', '> 1.2.3'
-  gem.add_dependency 'xml-simple'
-  gem.add_dependency 'builder'
-  gem.add_dependency 'mime-types'
+  # Do not add dependencies here because Jewler will add them from the Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
 

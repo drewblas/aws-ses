@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Drew Blas", "Marcel Molina Jr."]
-  s.date = %q{2011-03-11}
+  s.date = %q{2011-06-23}
   s.description = %q{Client library for Amazon's Simple Email Service's REST API}
   s.email = %q{drew.blas@gmail.com}
   s.extra_rdoc_files = [
@@ -73,42 +73,33 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<xml-simple>, [">= 0"])
       s.add_runtime_dependency(%q<builder>, [">= 0"])
       s.add_runtime_dependency(%q<mime-types>, [">= 0"])
-      s.add_runtime_dependency(%q<mail>, ["~> 2.2.5"])
+      s.add_runtime_dependency(%q<mail>, ["> 2.2.5"])
       s.add_development_dependency(%q<shoulda-context>, [">= 0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
       s.add_development_dependency(%q<flexmock>, ["~> 0.8.11"])
-      s.add_runtime_dependency(%q<xml-simple>, [">= 0"])
-      s.add_runtime_dependency(%q<builder>, [">= 0"])
-      s.add_runtime_dependency(%q<mime-types>, [">= 0"])
     else
       s.add_dependency(%q<xml-simple>, [">= 0"])
       s.add_dependency(%q<builder>, [">= 0"])
       s.add_dependency(%q<mime-types>, [">= 0"])
-      s.add_dependency(%q<mail>, ["~> 2.2.5"])
+      s.add_dependency(%q<mail>, ["> 2.2.5"])
       s.add_dependency(%q<shoulda-context>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_dependency(%q<rcov>, [">= 0"])
       s.add_dependency(%q<flexmock>, ["~> 0.8.11"])
-      s.add_dependency(%q<xml-simple>, [">= 0"])
-      s.add_dependency(%q<builder>, [">= 0"])
-      s.add_dependency(%q<mime-types>, [">= 0"])
     end
   else
     s.add_dependency(%q<xml-simple>, [">= 0"])
     s.add_dependency(%q<builder>, [">= 0"])
     s.add_dependency(%q<mime-types>, [">= 0"])
-    s.add_dependency(%q<mail>, ["~> 2.2.5"])
+    s.add_dependency(%q<mail>, ["> 2.2.5"])
     s.add_dependency(%q<shoulda-context>, [">= 0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
     s.add_dependency(%q<rcov>, [">= 0"])
     s.add_dependency(%q<flexmock>, ["~> 0.8.11"])
-    s.add_dependency(%q<xml-simple>, [">= 0"])
-    s.add_dependency(%q<builder>, [">= 0"])
-    s.add_dependency(%q<mime-types>, [">= 0"])
   end
 end
 

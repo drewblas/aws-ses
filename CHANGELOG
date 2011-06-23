@@ -1,3 +1,8 @@
+0.4.3:
+* No more error from Rails 3.1 about incompatible gem versions
+* Better error message
+* No duplicate dependencies
+
 0.4.2:
 * Added support for ReplyToAddresses, Destinations, and Source (pzb)
 * Added custom User-Agent header (pzb)

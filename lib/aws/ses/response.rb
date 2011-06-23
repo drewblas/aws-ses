@@ -98,7 +98,7 @@ module AWS
       end
       
       def message
-        @response.error['Code'] + @response.error['Message']
+        "#{@response.error['Code']} - #{@response.error['Message']}"
       end
     
       def inspect

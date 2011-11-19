@@ -1,3 +1,6 @@
+0.4.4:
+* Fixed error in initialized settings if you don't set them manually
+
 0.4.3:
 * No more error from Rails 3.1 about incompatible gem versions
 * Better error message

@@ -62,6 +62,7 @@ module AWS #:nodoc:
       include Info
       
       attr_reader :use_ssl, :server, :proxy_server, :port
+      attr_accessor :settings
 
       # @option options [String] :access_key_id ("") The user's AWS Access Key ID
       # @option options [String] :secret_access_key ("") The user's AWS Secret Access Key
@@ -86,6 +87,7 @@ module AWS #:nodoc:
         @use_ssl = options[:use_ssl]
         @path = options[:path]
         @user_agent = options[:user_agent]
+        @settings = {}
 
         raise ArgumentError, "No :access_key_id provided" if options[:access_key_id].nil? || options[:access_key_id].empty?
         raise ArgumentError, "No :secret_access_key provided" if options[:secret_access_key].nil? || options[:secret_access_key].empty?
@@ -121,8 +123,6 @@ module AWS #:nodoc:
         @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
       end
-      
-      attr_accessor :settings
       
       def connection
         @http

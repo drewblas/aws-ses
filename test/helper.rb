@@ -54,3 +54,9 @@ class Test::Unit::TestCase
     Base.new(:access_key_id=>'123', :secret_access_key=>'abc')
   end
 end
+
+# Deals w/ http://github.com/thoughtbot/shoulda/issues/issue/117, see 
+# http://stackoverflow.com/questions/3657972/nameerror-uninitialized-constant-testunitassertionfailederror-when-upgradin
+unless defined?(Test::Unit::AssertionFailedError)
+  Test::Unit::AssertionFailedError = ActiveSupport::TestCase::Assertion
+end

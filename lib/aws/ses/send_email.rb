@@ -96,8 +96,9 @@ module AWS
       # @option args [String] :to alias for :destinations
       # @return [Response]
       def send_raw_email(mail, args = {})
-        message = mail.is_a?(Hash) ? Mail.new(mail).to_s : mail.to_s
-        package = { 'RawMessage.Data' => Base64::encode64(message) }
+        message = mail.is_a?(Hash) ? Mail.new(mail) : mail
+        raise ArgumentError, "Attachment provided without message body" if message.has_attachments? && message.text_part.nil? && message.html_part.nil?
+        package = { 'RawMessage.Data' => Base64::encode64(message.to_s) }
         package['Source'] = args[:from] if args[:from]
         package['Source'] = args[:source] if args[:source]
         if args[:destinations]

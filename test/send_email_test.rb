@@ -46,6 +46,24 @@ class SendEmailTest < Test::Unit::TestCase
       assert_equal 'xyz-123', result.request_id
     end
     
+    should 'throw ArgumentException when attachment supplied without a body' do
+      #mock_connection(@base, :body => %{
+      #  <SendRawEmailResponse xmlns="http://ses.amazonaws.com/doc/2010-12-01/">
+      #    <SendRawEmailResult>
+      #      <MessageId>abc-123</MessageId>
+      #    </SendRawEmailResult>
+      #    <ResponseMetadata>
+      #      <RequestId>xyz-123</RequestId>
+      #    </ResponseMetadata>
+      #  </SendRawEmailResponse>
+      #})
+      message = Mail.new({:from => 'jon@example.com', :to => 'dave@example.com', :subject => 'Subject1'})
+      message.attachments['foo'] = { :mime_type => 'application/csv', :content => '1,2,3' }
+      assert_raise ArgumentError do
+        result = @base.send_raw_email message
+      end
+    end
+
     should 'send a raw e-mail with a hash object' do
       mock_connection(@base, :body => %{
         <SendRawEmailResponse xmlns="http://ses.amazonaws.com/doc/2010-12-01/">

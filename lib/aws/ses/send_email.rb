@@ -9,13 +9,13 @@ module AWS
     #                :subject   => 'Subject Line'
     #                :text_body => 'Internal text body'
     #
-    # By default, the email "from" display address is whatever is before the @. 
-    # To change the display from, use the format: 
+    # By default, the email "from" display address is whatever is before the @.
+    # To change the display from, use the format:
     #
     #   "Steve Smith" <steve@example.com>
     #
     # You can also send Mail objects using send_raw_email:
-    # 
+    #
     #   m = Mail.new( :to => ..., :from => ... )
     #   ses.send_raw_email(m)
     #
@@ -24,9 +24,9 @@ module AWS
     module SendEmail
       
       # Sends an email through SES
-      # 
+      #
       # the destination parameters can be:
-      # 
+      #
       # [A single e-mail string]  "jon@example.com"
       # [A array of e-mail addresses]  ['jon@example.com', 'dave@example.com']
       #
@@ -75,7 +75,7 @@ module AWS
       #
       # This uses the underlying Mail object from the mail gem
       # You can pass in a Mail object, a Hash of params that will be parsed by Mail.new, or just a string
-      # 
+      #
       # Note that the params are different from send_email
       # Specifically, the following fields from send_email will NOT work:
       #
@@ -106,7 +106,9 @@ module AWS
         else
             add_array_to_hash!(package, 'Destinations', args[:to]) if args[:to]
         end
-        request('SendRawEmail', package)
+        result = request('SendRawEmail', package)
+        message.message_id = "#{result.parsed['SendRawEmailResult']['MessageId']}@email.amazonses.com"
+        result
       end
 
       alias :deliver! :send_raw_email

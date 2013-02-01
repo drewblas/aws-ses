@@ -1,3 +1,7 @@
+0.4.5:
+* Check for existence of html or text body when attachments are included
+* Message ids in mail objects should now reflect what is actually sent.
+
 0.4.4:
 * Fixed error in initialized settings if you don't set them manually
 

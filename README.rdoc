@@ -95,8 +95,13 @@ GetSendStatisticsResponse#data_points is an array where each element is a hash w
 * +Complaints+
 * +Timestamp+
 
-  response = ses.statistics
-  response.data_points # =>
+For example:
+
+    response = ses.statistics
+    response.data_points
+
+will return:
+
       [{"Bounces"=>"0",
         "Timestamp"=>"2011-01-26T16:30:00Z",
         "DeliveryAttempts"=>"1",

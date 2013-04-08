@@ -23,6 +23,6 @@ require 'ses/version'
 require 'ses/addresses'
 
 if defined?(Rails)
-  major, minor = Rails.version.split('.')
+  major, minor = Rails.version.to_s.split('.')
   require 'actionmailer/ses_extension' if major == '2' && minor == '3'
 end

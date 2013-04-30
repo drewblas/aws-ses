@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Drew Blas", "Marcel Molina Jr."]
-  s.date = "2013-02-01"
+  s.date = "2013-04-30"
   s.description = "Client library for Amazon's Simple Email Service's REST API"
   s.email = "drew.blas@gmail.com"
   s.extra_rdoc_files = [

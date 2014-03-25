@@ -35,7 +35,7 @@ module AWS #:nodoc:
     # @param [Boolean] urlencode whether or not to url encode the result., true or false
     # @return [String] the signed and encoded string.
     def SES.encode(secret_access_key, str, urlencode=true)
-      digest = OpenSSL::Digest::Digest.new('sha256')
+      digest = OpenSSL::Digest.new('sha256')
       b64_hmac =
         Base64.encode64(
           OpenSSL::HMAC.digest(digest, secret_access_key, str)).gsub("\n","")

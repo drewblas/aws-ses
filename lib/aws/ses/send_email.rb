@@ -22,7 +22,7 @@ module AWS
     # send_raw_email will also take a hash and pass it through Mail.new automatically as well.
     #
     module SendEmail
-      
+
       # Sends an email through SES
       #
       # the destination parameters can be:
@@ -51,25 +51,25 @@ module AWS
       # @return [Response] the response to sending this e-mail
       def send_email(options = {})
         package     = {}
-        
+
         package['Source'] = options[:source] || options[:from]
-        
+
         add_array_to_hash!(package, 'Destination.ToAddresses', options[:to]) if options[:to]
         add_array_to_hash!(package, 'Destination.CcAddresses', options[:cc]) if options[:cc]
         add_array_to_hash!(package, 'Destination.BccAddresses', options[:bcc]) if options[:bcc]
-        
+
         package['Message.Subject.Data'] = options[:subject]
-        
+
         package['Message.Body.Html.Data'] = options[:html_body] if options[:html_body]
         package['Message.Body.Text.Data'] = options[:text_body] || options[:body] if options[:text_body] || options[:body]
-        
+
         package['ReturnPath'] = options[:return_path] if options[:return_path]
-        
+
         add_array_to_hash!(package, 'ReplyToAddresses', options[:reply_to]) if options[:reply_to]
-        
+
         request('SendEmail', package)
       end
-      
+
       # Sends using the SendRawEmail method
       # This gives the most control and flexibility
       #
@@ -98,24 +98,36 @@ module AWS
       def send_raw_email(mail, args = {})
         message = mail.is_a?(Hash) ? Mail.new(mail) : mail
         raise ArgumentError, "Attachment provided without message body" if message.has_attachments? && message.text_part.nil? && message.html_part.nil?
-        package = { 'RawMessage.Data' => Base64::encode64(message.to_s) }
-        package['Source'] = args[:from] if args[:from]
-        package['Source'] = args[:source] if args[:source]
-        if args[:destinations]
-            add_array_to_hash!(package, 'Destinations', args[:destinations])
-        else
-            add_array_to_hash!(package, 'Destinations', args[:to]) if args[:to]
-        end
-        result = request('SendRawEmail', package)
+
+        raw_email = build_raw_email(message, args)
+        result = request('SendRawEmail', raw_email)
         message.message_id = "#{result.parsed['SendRawEmailResult']['MessageId']}@email.amazonses.com"
         result
       end
 
       alias :deliver! :send_raw_email
       alias :deliver  :send_raw_email
-      
+
       private
-      
+
+      def build_raw_email(message, args = {})
+        # the message.to_s includes the :to and :cc addresses
+        package = { 'RawMessage.Data' => Base64::encode64(message.to_s) }
+        package['Source'] = args[:from] if args[:from]
+        package['Source'] = args[:source] if args[:source]
+        if args[:destinations]
+            add_array_to_hash!(package, 'Destinations', args[:destinations])
+        else
+          mail_addresses = [message.to, message.cc, message.bcc].flatten.compact
+          args_addresses = [args[:to], args[:cc], args[:bcc]].flatten.compact
+
+          mail_addresses = args_addresses unless args_addresses.empty?
+
+          add_array_to_hash!(package, 'Destinations', mail_addresses)
+        end
+        package
+      end
+
       # Adds all elements of the ary with the appropriate member elements
       def add_array_to_hash!(hash, key, ary)
         cnt = 1
@@ -125,23 +137,23 @@ module AWS
         end
       end
     end
-    
+
     class EmailResponse < AWS::SES::Response
       def result
         super["#{action}Result"]
       end
-      
+
       def message_id
         result['MessageId']
       end
     end
-    
+
     class SendEmailResponse < EmailResponse
-    
+
     end
-    
+
     class SendRawEmailResponse < EmailResponse
-    
+
     end
   end
 end

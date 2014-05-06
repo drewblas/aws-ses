@@ -26,12 +26,12 @@ Adds functionality for send_email and send_raw_email
 Use the following to send an e-mail:
 
   ses = AWS::SES::Base.new( ... connection info ... )
-  ses.send_email (
+  ses.send_email(
                :to        => ['jon@example.com', 'dave@example.com'],
                :source    => '"Steve Smith" <steve@example.com>',
-               :subject   => 'Subject Line'
+               :subject   => 'Subject Line',
                :text_body => 'Internal text body'
-    )
+  )
 By default, the email "from" display address is whatever is before the @. 
 To change the display from, use the format: 
 

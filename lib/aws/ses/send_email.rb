@@ -99,8 +99,8 @@ module AWS
         message = mail.is_a?(Hash) ? Mail.new(mail) : mail
         raise ArgumentError, "Attachment provided without message body" if message.has_attachments? && message.text_part.nil? && message.html_part.nil?
 
-        package = build_package(message, args)
-        result = request('SendRawEmail', package)
+        raw_email = build_raw_email(message, args)
+        result = request('SendRawEmail', raw_email)
         message.message_id = "#{result.parsed['SendRawEmailResult']['MessageId']}@email.amazonses.com"
         result
       end
@@ -110,7 +110,7 @@ module AWS
 
       private
 
-      def build_package(message, args = {})
+      def build_raw_email(message, args = {})
         # the message.to_s includes the :to and :cc addresses
         package = { 'RawMessage.Data' => Base64::encode64(message.to_s) }
         package['Source'] = args[:from] if args[:from]
@@ -118,11 +118,12 @@ module AWS
         if args[:destinations]
             add_array_to_hash!(package, 'Destinations', args[:destinations])
         else
-            add_array_to_hash!(package, 'Destinations', args[:to]) if args[:to]
+          mail_addresses = [message.to, message.cc, message.bcc].flatten.compact
+          args_addresses = [args[:to], args[:cc], args[:bcc]].flatten.compact
 
-            # since bcc aren't included in the message.to_s, we have to add them separately
-            add_array_to_hash!(package, 'Destinations', args[:bcc]) if args[:bcc]
-            add_array_to_hash!(package, 'Destinations', message.bcc) if message.bcc
+          mail_addresses = args_addresses unless args_addresses.empty?
+
+          add_array_to_hash!(package, 'Destinations', mail_addresses)
         end
         package
       end

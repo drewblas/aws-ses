@@ -82,17 +82,42 @@ class SendEmailTest < Test::Unit::TestCase
       assert_equal 'xyz-123', result.request_id
     end
 
+    context "with a standard email"  do
+      setup do
+        @message = Mail.new({:from => 'jon@example.com', :to => 'dave@example.com', :cc => 'sally@example.com', :subject => 'Subject1', :body => "test body"})
+      end
+
+      should "add the 2 addresses to the Destinations" do
+        package = @base.send("build_raw_email", @message)
+        assert_equal 'dave@example.com',  package['Destinations.member.1']
+        assert_equal 'sally@example.com', package['Destinations.member.2']
+      end
+
+      should "be able to override the e-mail destinations" do
+        dest_options = {:to => "another@example.com", :cc => "bob@example.com" }
+        package = @base.send("build_raw_email", @message, dest_options)
+        assert_equal 'another@example.com',  package['Destinations.member.1']
+        assert_equal 'bob@example.com', package['Destinations.member.2']
+      end
+    end
+
     should "add the bcc address to the email destinations" do
       message = Mail.new({:from => 'jon@example.com', :bcc => "robin@example.com", :to => 'dave@example.com', :subject => 'Subject1', :body => "test body"})
-      package = @base.send("build_package", message)
-      assert_equal 'robin@example.com', package['Destinations.member.1']
+      package = @base.send("build_raw_email", message)
+      assert_equal 'dave@example.com',  package['Destinations.member.1']
+      assert_equal 'robin@example.com', package['Destinations.member.2']
     end
 
     should "when only bcc address in the email" do
       message = Mail.new({:from => 'jon@example.com', :bcc => ["robin@example.com", 'dave@example.com'], :subject => 'Subject1', :body => "test body"})
-      package = @base.send("build_package", message)
+      package = @base.send("build_raw_email", message)
       assert_equal 'robin@example.com', package['Destinations.member.1']
       assert_equal 'dave@example.com',  package['Destinations.member.2']
+    end
+
+    should "add the mail addresses to the email destination" do
+      message = Mail.new({:from => 'jon@example.com', :to => ["robin@example.com", 'dave@example.com'], :subject => 'Subject1', :body => "test body"})
+
     end
   end
 end

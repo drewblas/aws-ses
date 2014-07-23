@@ -17,6 +17,18 @@ module AWS #:nodoc:
   #   )
   # 
   # The minimum connection options that you must specify are your access key id and your secret access key.
+  #
+  # === Connecting to a server from another region
+  # 
+  # The default server API endpoint is "email.us-east-1.amazonaws.com", corresponding to the US East 1 region.
+  # To connect to a different one, just pass it as a parameter to the AWS::SES::Base initializer:
+  #
+  #   ses = AWS::SES::Base.new(
+  #     :access_key_id     => 'abc', 
+  #     :secret_access_key => '123',
+  #     :server => 'email.eu-west-1.amazonaws.com'
+  #   )
+
   module SES
     
     API_VERSION = '2010-12-01'

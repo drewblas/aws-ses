@@ -50,6 +50,7 @@ namespace :doc do
     system 'open doc/index.html'
   end
 
+  desc "Generate readme.rdoc from readme.erb"
   task :readme do
     require 'support/rdoc/code_info'
     RDoc::CodeInfo.parse('lib/**/*.rb')

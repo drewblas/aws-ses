@@ -75,9 +75,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<mime-types>, [">= 0"])
       s.add_runtime_dependency(%q<mail>, ["> 2.2.5"])
       s.add_development_dependency(%q<shoulda-context>, [">= 0"])
-      s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
-      s.add_development_dependency(%q<rcov>, [">= 0"])
       s.add_development_dependency(%q<flexmock>, ["~> 0.8.11"])
     else
       s.add_dependency(%q<xml-simple>, [">= 0"])
@@ -85,9 +82,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<mime-types>, [">= 0"])
       s.add_dependency(%q<mail>, ["> 2.2.5"])
       s.add_dependency(%q<shoulda-context>, [">= 0"])
-      s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
-      s.add_dependency(%q<rcov>, [">= 0"])
       s.add_dependency(%q<flexmock>, ["~> 0.8.11"])
     end
   else
@@ -96,9 +90,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<mime-types>, [">= 0"])
     s.add_dependency(%q<mail>, ["> 2.2.5"])
     s.add_dependency(%q<shoulda-context>, [">= 0"])
-    s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-    s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
-    s.add_dependency(%q<rcov>, [">= 0"])
     s.add_dependency(%q<flexmock>, ["~> 0.8.11"])
   end
 end

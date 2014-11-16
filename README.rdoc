@@ -151,7 +151,7 @@ Then, add your Amazon credentials and extend ActionMailer in `config/initializer
       :access_key_id     => 'abc',
       :secret_access_key => '123'
 
-Then set the delivery method in `config/environments/*rb` as appropriate:
+Then set the delivery method in `config/environments/*.rb` as appropriate:
 
     config.action_mailer.delivery_method = :ses
 
@@ -179,8 +179,12 @@ It means that you are not running with SSL enabled in ruby.  Re-compile ruby wit
 If you are receiving this message and you HAVE verified the [source] please <b>check to be sure you are not in sandbox mode!</b>
     "Email address is not verified.MessageRejected (AWS::Error)"
 If you have not been granted production access, you will have to <b>verify all recipients</b> as well.
-  
-http://docs.amazonwebservices.com/ses/2010-12-01/DeveloperGuide/index.html?InitialSetup.Customer.html
+
+To verify email addresses and domains:
+https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html
+
+To request production access:
+https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
 
 == Source
 

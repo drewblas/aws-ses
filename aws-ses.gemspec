@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "aws-ses"
-  s.version = "0.6.0"
+  s.version = '0.6.0'
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Drew Blas", "Marcel Molina Jr."]
@@ -38,6 +38,8 @@ Gem::Specification.new do |s|
     "lib/aws/ses/info.rb",
     "lib/aws/ses/response.rb",
     "lib/aws/ses/send_email.rb",
+    "lib/aws/ses/identity.rb",
+    "lib/aws/ses/notification.rb",
     "lib/aws/ses/version.rb",
     "test/address_test.rb",
     "test/base_test.rb",

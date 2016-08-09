@@ -14,6 +14,15 @@
 
 <%= docs_for['AWS::SES::Info'] %>
 
+
+== Info
+
+<%= docs_for['AWS::SES::Identity'] %>
+
+== Info
+
+<%= docs_for['AWS::SES::Notifications'] %>
+
 == Rails
 
 This gem is compatible with Rails >= 3.0.0 and Rails 2.3.x
@@ -21,7 +30,7 @@ This gem is compatible with Rails >= 3.0.0 and Rails 2.3.x
 To use, first add the gem to your Gemfile:
 
     gem "aws-ses", "~> 0.6.0", :require => 'aws/ses'
-    
+
 == For Rails 3.x
 
 Then, add your Amazon credentials and extend ActionMailer in `config/initializers/amazon_ses.rb`:
@@ -42,7 +51,7 @@ Then set the delivery method in `config/environments/*rb` as appropriate:
       ActionMailer::Base.delivery_method = :amazon_ses
       ActionMailer::Base.custom_amazon_ses_mailer = AWS::SES::Base.new(:secret_access_key => 'abc', :access_key_id => '123')
     end
-    
+
 == Issues
 
 === HTTP Segmentation fault
@@ -52,13 +61,13 @@ If you get this error:
 
 It means that you are not running with SSL enabled in ruby.  Re-compile ruby with ssl support or add this option to your environment:
     RUBYOPT="-r openssl"
-    
+
 === Rejected sending
 
 If you are receiving this message and you HAVE verified the [source] please <b>check to be sure you are not in sandbox mode!</b>
     "Email address is not verified.MessageRejected (AWS::Error)"
 If you have not been granted production access, you will have to <b>verify all recipients</b> as well.
-  
+
 http://docs.amazonwebservices.com/ses/2010-12-01/DeveloperGuide/index.html?InitialSetup.Customer.html
 
 == Source
@@ -66,7 +75,7 @@ http://docs.amazonwebservices.com/ses/2010-12-01/DeveloperGuide/index.html?Initi
 Available at: https://github.com/drewblas/aws-ses
 
 == Contributing to aws-ses
- 
+
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
 * Fork the project
@@ -90,3 +99,4 @@ Special thanks to Marcel Molina Jr. for his creation of AWS::S3 which I used por
 * sshaw
 * teeparham (documentation)
 * pzb
+* oma

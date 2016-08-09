@@ -21,6 +21,8 @@ require 'ses/info'
 require 'ses/base'
 require 'ses/version'
 require 'ses/addresses'
+require 'ses/identity'
+require 'ses/notifications'
 
 if defined?(Rails)
   major, minor = Rails.version.to_s.split('.')

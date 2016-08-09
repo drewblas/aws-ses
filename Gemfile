@@ -10,6 +10,11 @@ group :development do
   gem "bundler"
   #gem "rcov", ">= 0"
   gem 'flexmock', '~> 0.8.11'
+  gem 'rake'
+  gem 'rdoc'
+end
+group :test do
+  gem 'test-unit'
 end
 
 gem 'xml-simple'

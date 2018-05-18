@@ -130,10 +130,6 @@ module AWS #:nodoc:
                                   proxy.password).new(options[:server], @port)
 
         @http.use_ssl = @use_ssl
-
-        # Don't verify the SSL certificates.  Avoids SSL Cert warning in log on every GET.
-        @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
       end
       
       def connection

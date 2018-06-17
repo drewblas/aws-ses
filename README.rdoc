@@ -137,7 +137,7 @@ will return:
 
 == Rails
 
-This gem is compatible with Rails >= 3.0.0 and Rails 2.3.x
+This gem is compatible with Rails >= 3.0.0 and Ruby 2.3.x
 
 To use, first add the gem to your Gemfile:
 

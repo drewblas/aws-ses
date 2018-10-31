@@ -101,7 +101,7 @@ module AWS
 
         raw_email = build_raw_email(message, args)
         result = request('SendRawEmail', raw_email)
-        message.message_id = "#{result.parsed['SendRawEmailResult']['MessageId']}@email.amazonses.com"
+        message.message_id = "#{result.parsed['SendRawEmailResult']['MessageId']}@#{region}.amazonses.com"
         result
       end
 

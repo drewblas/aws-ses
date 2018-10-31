@@ -34,6 +34,8 @@ module AWS #:nodoc:
     API_VERSION = '2010-12-01'
     
     DEFAULT_HOST = 'email.us-east-1.amazonaws.com'
+
+    DEFAULT_REGION = 'us-east-1'
     
     USER_AGENT = 'github-aws-ses-ruby-gem'
     
@@ -73,7 +75,7 @@ module AWS #:nodoc:
       include SendEmail
       include Info
       
-      attr_reader :use_ssl, :server, :proxy_server, :port
+      attr_reader :use_ssl, :server, :proxy_server, :port, :region
       attr_accessor :settings
 
       # @option options [String] :access_key_id ("") The user's AWS Access Key ID
@@ -82,6 +84,7 @@ module AWS #:nodoc:
       # @option options [String] :server ("email.us-east-1.amazonaws.com") The server API endpoint host
       # @option options [String] :proxy_server (nil) An HTTP proxy server FQDN
       # @option options [String] :user_agent ("github-aws-ses-ruby-gem") The HTTP User-Agent header value
+      # @option options [String] :region ("us-east-1") Region of AWS endpoint, to build accurate message-id
       # @return [Object] the object.
       def initialize( options = {} )
 
@@ -89,12 +92,14 @@ module AWS #:nodoc:
                     :secret_access_key => "",
                     :use_ssl => true,
                     :server => DEFAULT_HOST,
+                    :region => DEFAULT_REGION,
                     :path => "/",
                     :user_agent => USER_AGENT,
                     :proxy_server => nil
                     }.merge(options)
 
         @server = options[:server]
+        @region = options[:region]
         @proxy_server = options[:proxy_server]
         @use_ssl = options[:use_ssl]
         @path = options[:path]

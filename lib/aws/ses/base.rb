@@ -26,8 +26,10 @@ module AWS #:nodoc:
   #   ses = AWS::SES::Base.new(
   #     :access_key_id     => 'abc', 
   #     :secret_access_key => '123',
-  #     :server => 'email.eu-west-1.amazonaws.com'
+  #     :server => 'email.eu-west-1.amazonaws.com',
+  #     :message_id_domain => 'eu-west-1.amazonses.com'
   #   )
+  #
 
   module SES
     
@@ -35,7 +37,7 @@ module AWS #:nodoc:
     
     DEFAULT_HOST = 'email.us-east-1.amazonaws.com'
 
-    DEFAULT_REGION = 'us-east-1'
+    DEFAULT_MESSAGE_ID_DOMAIN = 'email.amazonses.com'
     
     USER_AGENT = 'github-aws-ses-ruby-gem'
     
@@ -75,7 +77,7 @@ module AWS #:nodoc:
       include SendEmail
       include Info
       
-      attr_reader :use_ssl, :server, :proxy_server, :port, :region
+      attr_reader :use_ssl, :server, :proxy_server, :port, :message_id_domain
       attr_accessor :settings
 
       # @option options [String] :access_key_id ("") The user's AWS Access Key ID
@@ -84,7 +86,7 @@ module AWS #:nodoc:
       # @option options [String] :server ("email.us-east-1.amazonaws.com") The server API endpoint host
       # @option options [String] :proxy_server (nil) An HTTP proxy server FQDN
       # @option options [String] :user_agent ("github-aws-ses-ruby-gem") The HTTP User-Agent header value
-      # @option options [String] :region ("us-east-1") Region of AWS endpoint, to build accurate message-id
+      # @option options [String] :message_id_domain ("us-east-1.amazonses.com") Domain used to build message_id header
       # @return [Object] the object.
       def initialize( options = {} )
 
@@ -92,14 +94,14 @@ module AWS #:nodoc:
                     :secret_access_key => "",
                     :use_ssl => true,
                     :server => DEFAULT_HOST,
-                    :region => DEFAULT_REGION,
+                    :message_id_domain => DEFAULT_MESSAGE_ID_DOMAIN,
                     :path => "/",
                     :user_agent => USER_AGENT,
                     :proxy_server => nil
                     }.merge(options)
 
         @server = options[:server]
-        @region = options[:region]
+        @message_id_domain = options[:message_id_domain]
         @proxy_server = options[:proxy_server]
         @use_ssl = options[:use_ssl]
         @path = options[:path]

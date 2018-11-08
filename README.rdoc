@@ -28,7 +28,8 @@ To connect to a different one, just pass it as a parameter to the AWS::SES::Base
   ses = AWS::SES::Base.new(
     :access_key_id     => 'abc', 
     :secret_access_key => '123',
-    :server => 'email.eu-west-1.amazonaws.com'
+    :server => 'email.eu-west-1.amazonaws.com',
+    :message_id_domain => 'eu-west-1.amazonses.com'
   )
 
 == Send E-mail
@@ -133,7 +134,6 @@ will return:
         "DeliveryAttempts"=>"3",
         "Rejects"=>"0",
         "Complaints"=>"0"}]
-
 
 == Rails
 

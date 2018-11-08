@@ -26,14 +26,18 @@ module AWS #:nodoc:
   #   ses = AWS::SES::Base.new(
   #     :access_key_id     => 'abc', 
   #     :secret_access_key => '123',
-  #     :server => 'email.eu-west-1.amazonaws.com'
+  #     :server => 'email.eu-west-1.amazonaws.com',
+  #     :message_id_domain => 'eu-west-1.amazonses.com'
   #   )
+  #
 
   module SES
     
     API_VERSION = '2010-12-01'
     
     DEFAULT_HOST = 'email.us-east-1.amazonaws.com'
+
+    DEFAULT_MESSAGE_ID_DOMAIN = 'email.amazonses.com'
     
     USER_AGENT = 'github-aws-ses-ruby-gem'
     
@@ -73,7 +77,7 @@ module AWS #:nodoc:
       include SendEmail
       include Info
       
-      attr_reader :use_ssl, :server, :proxy_server, :port
+      attr_reader :use_ssl, :server, :proxy_server, :port, :message_id_domain
       attr_accessor :settings
 
       # @option options [String] :access_key_id ("") The user's AWS Access Key ID
@@ -82,6 +86,7 @@ module AWS #:nodoc:
       # @option options [String] :server ("email.us-east-1.amazonaws.com") The server API endpoint host
       # @option options [String] :proxy_server (nil) An HTTP proxy server FQDN
       # @option options [String] :user_agent ("github-aws-ses-ruby-gem") The HTTP User-Agent header value
+      # @option options [String] :message_id_domain ("us-east-1.amazonses.com") Domain used to build message_id header
       # @return [Object] the object.
       def initialize( options = {} )
 
@@ -89,12 +94,14 @@ module AWS #:nodoc:
                     :secret_access_key => "",
                     :use_ssl => true,
                     :server => DEFAULT_HOST,
+                    :message_id_domain => DEFAULT_MESSAGE_ID_DOMAIN,
                     :path => "/",
                     :user_agent => USER_AGENT,
                     :proxy_server => nil
                     }.merge(options)
 
         @server = options[:server]
+        @message_id_domain = options[:message_id_domain]
         @proxy_server = options[:proxy_server]
         @use_ssl = options[:use_ssl]
         @path = options[:path]

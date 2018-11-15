@@ -3,10 +3,17 @@ GEM
   specs:
     builder (3.2.2)
     flexmock (0.8.11)
+    json (1.8.3)
     mail (2.6.1)
       mime-types (>= 1.16, < 3)
     mime-types (2.4.1)
+    power_assert (0.3.0)
+    rake (11.2.2)
+    rdoc (4.2.2)
+      json (~> 1.4)
     shoulda-context (1.2.1)
+    test-unit (3.2.1)
+      power_assert
     xml-simple (1.1.4)
 
 PLATFORMS
@@ -18,5 +25,11 @@ DEPENDENCIES
   flexmock (~> 0.8.11)
   mail (> 2.2.5)
   mime-types
+  rake
+  rdoc
   shoulda-context
+  test-unit
   xml-simple
+
+BUNDLED WITH
+   1.12.5

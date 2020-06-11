@@ -82,6 +82,27 @@ class SendEmailTest < Test::Unit::TestCase
       assert_equal 'xyz-123', result.request_id
     end
 
+    should 'send a raw e-mail with a mail object' do
+      mock_connection(@base, :body => %{
+        <SendRawEmailResponse xmlns="http://ses.amazonaws.com/doc/2010-12-01/">
+          <SendRawEmailResult>
+            <MessageId>abc-123</MessageId>
+          </SendRawEmailResult>
+          <ResponseMetadata>
+            <RequestId>xyz-123</RequestId>
+          </ResponseMetadata>
+        </SendRawEmailResponse>
+      })
+
+      message = Mail.new(@basic_email)
+      result = @base.send_raw_email(message)
+      assert result.success?
+      assert_equal 'abc-123', result.message_id
+      assert_equal 'xyz-123', result.request_id
+      assert message.errors.empty?
+      assert_equal 'abc-123@email.amazonses.com', message.message_id
+    end
+
     context "with a standard email"  do
       setup do
         @message = Mail.new({:from => 'jon@example.com', :to => 'dave@example.com', :cc => 'sally@example.com', :subject => 'Subject1', :body => "test body"})

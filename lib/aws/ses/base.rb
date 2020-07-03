@@ -71,7 +71,11 @@ module AWS #:nodoc:
     def SES.authorization_header(key, alg, sig)
       "AWS3-HTTPS AWSAccessKeyId=#{key}, Algorithm=#{alg}, Signature=#{sig}"
     end
-    
+
+    def SES.authorization_header_v4(credential, signed_headers, signature)
+      "AWS4-HMAC-SHA256 Credential=#{credential}, SignedHeaders=#{signed_headers}, Signature=#{signature}"
+    end
+
     # AWS::SES::Base is the abstract super class of all classes who make requests against SES
     class Base   
       include SendEmail
@@ -167,7 +171,7 @@ module AWS #:nodoc:
 
         req['X-Amzn-Authorization'] = get_aws_auth_param(timestamp.httpdate, @secret_access_key)
         req['Date'] = timestamp.httpdate
-        req['User-Agent'] = @user_agent 
+        req['User-Agent'] = @user_agent
 
         response = connection.post(@path, query, req)
         
@@ -182,9 +186,94 @@ module AWS #:nodoc:
       end
 
       # Set the Authorization header using AWS signed header authentication
-      def get_aws_auth_param(timestamp, secret_access_key)
+      def get_aws_auth_param(timestamp, secret_access_key, signature_version = 'v2')
         encoded_canonical = SES.encode(secret_access_key, timestamp, false)
-        SES.authorization_header(@access_key_id, 'HmacSHA256', encoded_canonical)
+        return SES.authorization_header(@access_key_id, 'HmacSHA256', encoded_canonical) unless signature_version == 'v4'
+
+        SES.authorization_header_v4(sig_v4_auth_credential, sig_v4_auth_signed_headers, sig_v4_auth_signature)
+      end
+
+      private
+
+      def sig_v4_auth_credential
+        @access_key_id + '/' + credential_scope
+      end
+
+      def sig_v4_auth_signed_headers
+        'host;x-amz-date'
+      end
+
+      def credential_scope
+        datestamp + '/' + region + '/' + service + '/' + 'aws4_request'
+      end
+
+      def string_to_sign
+        "AWS4-HMAC-SHA256\n" +  amzdate + "\n" +  credential_scope + "\n" + Digest::SHA256.hexdigest(canonical_request.encode('utf-8').b)
+      end
+
+
+      def amzdate
+        Time.now.utc.strftime('%Y%m%dT%H%M%SZ')
+      end
+
+      def datestamp
+        Time.now.utc.strftime('%Y%m%d')
+      end
+
+      def region
+        'us-east-1'
+      end
+
+      def service
+        'ec2'
+      end
+
+      def canonical_request
+        canonical_request_method + "\n" + canonical_uri + "\n" + canonical_querystring + "\n" + canonical_headers + "\n" + sig_v4_auth_signed_headers + "\n" + payload_hash
+      end
+
+      def canonical_request_method
+        'GET'
+      end
+
+      def canonical_uri
+        '/'
+      end
+
+      # TODO
+      def canonical_querystring
+        'Action=DescribeRegions&Version=2013-10-15'
+      end
+
+      def canonical_headers
+        'host:' + host + "\n" + 'x-amz-date:' + amzdate + "\n"
+      end
+
+      def host
+        'ec2.amazonaws.com'
+      end
+
+      def payload_hash
+        Digest::SHA256.hexdigest(''.encode('utf-8'))
+      end
+
+      def sig_v4_auth_signature
+        signing_key = getSignatureKey(@secret_access_key, datestamp, region, service)
+
+        OpenSSL::HMAC.hexdigest("SHA256", signing_key, string_to_sign.encode('utf-8'))
+      end
+
+      def getSignatureKey(key, dateStamp, regionName, serviceName)
+        kDate = sign(('AWS4' + key).encode('utf-8'), dateStamp)
+        kRegion = sign(kDate, regionName)
+        kService = sign(kRegion, serviceName)
+        kSigning = sign(kService, 'aws4_request')
+
+        kSigning
+      end
+
+      def sign(key, msg)
+        OpenSSL::HMAC.digest("SHA256", key, msg.encode('utf-8'))
       end
     end # class Base
   end # Module SES

@@ -37,4 +37,31 @@ class BaseTest < Test::Unit::TestCase
     #     assert result.error.error?
     #     assert_equal 'ValidationError', result.error.code
   end
+
+  def test_ses_authorization_header_v2
+    aws_access_key_id = 'fake_aws_key_id'
+    aws_secret_access_key = 'fake_aws_access_key'
+    timestamp = Time.new(2020, 7, 2, 7, 17, 58, '+00:00')
+
+    base = ::    AWS::SES::Base.new(
+        access_key_id:     aws_access_key_id,
+        secret_access_key: aws_secret_access_key
+    )
+
+    assert_equal 'AWS3-HTTPS AWSAccessKeyId=fake_aws_key_id, Algorithm=HmacSHA256, Signature=eHh/cPIJJUc1+RMCueAi50EPlYxkZNXMrxtGxjkBD1w=', base.get_aws_auth_param(timestamp.httpdate, aws_secret_access_key)
+  end
+
+  def test_ses_authorization_header_v4
+    aws_access_key_id = 'fake_aws_key_id'
+    aws_secret_access_key = 'fake_aws_access_key'
+    time = Time.new(2020, 7, 2, 7, 17, 58, '+00:00')
+    ::Timecop.freeze(time)
+
+    base = ::    AWS::SES::Base.new(
+        access_key_id:     aws_access_key_id,
+        secret_access_key: aws_secret_access_key
+    )
+
+    assert_equal 'AWS4-HMAC-SHA256 Credential=fake_aws_key_id/20200702/us-east-1/ec2/aws4_request, SignedHeaders=host;x-amz-date, Signature=c0465b36efd110b14a1c6dcca3e105085ed2bfb2a3fd3b3586cc459326ab43aa', base.get_aws_auth_param(time.httpdate, aws_secret_access_key, 'v4')
+  end
 end

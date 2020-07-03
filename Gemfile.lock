@@ -10,6 +10,7 @@ GEM
     shoulda-context (1.2.1)
     test-unit (3.3.6)
       power_assert
+    timecop (0.9.1)
     xml-simple (1.1.4)
 
 PLATFORMS
@@ -23,6 +24,7 @@ DEPENDENCIES
   mime-types
   shoulda-context
   test-unit
+  timecop
   xml-simple
 
 BUNDLED WITH

@@ -42,6 +42,7 @@ class BaseTest < Test::Unit::TestCase
     aws_access_key_id = 'fake_aws_key_id'
     aws_secret_access_key = 'fake_aws_access_key'
     timestamp = Time.new(2020, 7, 2, 7, 17, 58, '+00:00')
+    ::Timecop.freeze(timestamp)
 
     base = ::    AWS::SES::Base.new(
         access_key_id:     aws_access_key_id,
@@ -58,10 +59,28 @@ class BaseTest < Test::Unit::TestCase
     ::Timecop.freeze(time)
 
     base = ::    AWS::SES::Base.new(
+        server:            'ec2.amazonaws.com',
+        signature_version: 4,
         access_key_id:     aws_access_key_id,
         secret_access_key: aws_secret_access_key
     )
 
-    assert_equal 'AWS4-HMAC-SHA256 Credential=fake_aws_key_id/20200702/us-east-1/ec2/aws4_request, SignedHeaders=host;x-amz-date, Signature=c0465b36efd110b14a1c6dcca3e105085ed2bfb2a3fd3b3586cc459326ab43aa', base.get_aws_auth_param(time.httpdate, aws_secret_access_key, 'v4')
+    assert_equal 'AWS4-HMAC-SHA256 Credential=fake_aws_key_id/20200702/us-east-1/ec2/aws4_request, SignedHeaders=host;x-amz-date, Signature=c0465b36efd110b14a1c6dcca3e105085ed2bfb2a3fd3b3586cc459326ab43aa', base.get_aws_auth_param(time.httpdate, aws_secret_access_key, 'DescribeRegions', 4)
+  end
+
+  def test_ses_authorization_header_v4_changed_host
+    aws_access_key_id = 'fake_aws_key_id'
+    aws_secret_access_key = 'fake_aws_access_key'
+    time = Time.new(2020, 7, 2, 7, 17, 58, '+00:00')
+    ::Timecop.freeze(time)
+
+    base = ::    AWS::SES::Base.new(
+        server:            'email.us-east-1.amazonaws.com',
+        signature_version: 4,
+        access_key_id:     aws_access_key_id,
+        secret_access_key: aws_secret_access_key
+    )
+
+    assert_equal 'AWS4-HMAC-SHA256 Credential=fake_aws_key_id/20200702/us-east-1/ec2/aws4_request, SignedHeaders=host;x-amz-date, Signature=b872601457070ab98e7038bdcd4dc1f5eab586ececf9908525474408b0740515', base.get_aws_auth_param(time.httpdate, aws_secret_access_key, 'DescribeRegions', 4)
   end
 end

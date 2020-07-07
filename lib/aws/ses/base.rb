@@ -37,6 +37,8 @@ module AWS #:nodoc:
 
     REGION = 'us-east-1'
 
+    SERVICE = 'ec2'
+
     DEFAULT_HOST = 'email.us-east-1.amazonaws.com'
 
     DEFAULT_MESSAGE_ID_DOMAIN = 'email.amazonses.com'
@@ -207,7 +209,7 @@ module AWS #:nodoc:
       end
 
       def credential_scope
-        datestamp + '/' + REGION + '/' + service + '/' + 'aws4_request'
+        datestamp + '/' + REGION + '/' + SERVICE + '/' + 'aws4_request'
       end
 
       def string_to_sign(for_action)
@@ -221,10 +223,6 @@ module AWS #:nodoc:
 
       def datestamp
         Time.now.utc.strftime('%Y%m%d')
-      end
-
-      def service
-        'ec2'
       end
 
       def canonical_request(for_action)
@@ -244,7 +242,7 @@ module AWS #:nodoc:
       end
 
       def sig_v4_auth_signature(for_action)
-        signing_key = getSignatureKey(@secret_access_key, datestamp, REGION, service)
+        signing_key = getSignatureKey(@secret_access_key, datestamp, REGION, SERVICE)
 
         OpenSSL::HMAC.hexdigest("SHA256", signing_key, string_to_sign(for_action).encode('utf-8'))
       end

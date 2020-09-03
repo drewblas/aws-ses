@@ -67,3 +67,17 @@ namespace :doc do
     end
   end
 end
+
+require 'jeweler'
+Jeweler::Tasks.new do |gem|
+  # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
+  gem.name = "aws-ses"
+  gem.homepage = "http://github.com/drewblas/aws-ses"
+  gem.license = "MIT"
+  gem.summary = "Client library for Amazon's Simple Email Service's REST API"
+  gem.description = "Client library for Amazon's Simple Email Service's REST API"
+  gem.email = "drew.blas@gmail.com"
+  gem.authors = ["Drew Blas", "Marcel Molina Jr."]
+  # dependencies defined in Gemfile
+end
+Jeweler::RubygemsDotOrgTasks.new

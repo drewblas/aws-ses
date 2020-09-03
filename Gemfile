@@ -8,6 +8,7 @@ source "http://rubygems.org"
 group :development do
   gem "bundler", ">= 1.17"
   gem 'flexmock', '~> 0.8.11'
+  gem "jeweler"
   gem "rake"
   gem "shoulda-context", ">= 0"
   gem 'test-unit'

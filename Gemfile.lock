@@ -7,6 +7,7 @@ GEM
       mime-types (>= 1.16, < 3)
     mime-types (2.4.1)
     power_assert (1.2.0)
+    rake (13.0.1)
     shoulda-context (1.2.1)
     test-unit (3.3.6)
       power_assert
@@ -18,14 +19,15 @@ PLATFORMS
 
 DEPENDENCIES
   builder
-  bundler
+  bundler (>= 1.17)
   flexmock (~> 0.8.11)
   mail (> 2.2.5)
   mime-types
+  rake
   shoulda-context
   test-unit
   timecop
   xml-simple
 
 BUNDLED WITH
-   2.1.4
+   1.17.3

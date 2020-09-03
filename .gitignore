@@ -42,3 +42,8 @@ pkg
 #*.swp
 #
 .rvmrc
+
+# ignore idea files
+.rakeTasks
+/workspace.xml
+.idea/

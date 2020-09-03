@@ -24,6 +24,7 @@ require File.dirname(__FILE__) + '/fixtures'
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'aws/ses'
+require 'timecop'
 
 class Test::Unit::TestCase
   require 'net/http'

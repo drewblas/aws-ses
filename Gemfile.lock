@@ -6,7 +6,11 @@ GEM
     mail (2.6.1)
       mime-types (>= 1.16, < 3)
     mime-types (2.4.1)
+    power_assert (1.2.0)
     shoulda-context (1.2.1)
+    test-unit (3.3.6)
+      power_assert
+    timecop (0.9.1)
     xml-simple (1.1.4)
 
 PLATFORMS
@@ -19,4 +23,9 @@ DEPENDENCIES
   mail (> 2.2.5)
   mime-types
   shoulda-context
+  test-unit
+  timecop
   xml-simple
+
+BUNDLED WITH
+   2.1.4

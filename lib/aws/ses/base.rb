@@ -34,7 +34,11 @@ module AWS #:nodoc:
   module SES
     
     API_VERSION = '2010-12-01'
-    
+
+    DEFAULT_REGION = 'us-east-1'
+
+    SERVICE = 'ec2'
+
     DEFAULT_HOST = 'email.us-east-1.amazonaws.com'
 
     DEFAULT_MESSAGE_ID_DOMAIN = 'email.amazonses.com'
@@ -71,13 +75,17 @@ module AWS #:nodoc:
     def SES.authorization_header(key, alg, sig)
       "AWS3-HTTPS AWSAccessKeyId=#{key}, Algorithm=#{alg}, Signature=#{sig}"
     end
-    
+
+    def SES.authorization_header_v4(credential, signed_headers, signature)
+      "AWS4-HMAC-SHA256 Credential=#{credential}, SignedHeaders=#{signed_headers}, Signature=#{signature}"
+    end
+
     # AWS::SES::Base is the abstract super class of all classes who make requests against SES
     class Base   
       include SendEmail
       include Info
       
-      attr_reader :use_ssl, :server, :proxy_server, :port, :message_id_domain
+      attr_reader :use_ssl, :server, :proxy_server, :port, :message_id_domain, :signature_version, :region
       attr_accessor :settings
 
       # @option options [String] :access_key_id ("") The user's AWS Access Key ID
@@ -86,6 +94,7 @@ module AWS #:nodoc:
       # @option options [String] :server ("email.us-east-1.amazonaws.com") The server API endpoint host
       # @option options [String] :proxy_server (nil) An HTTP proxy server FQDN
       # @option options [String] :user_agent ("github-aws-ses-ruby-gem") The HTTP User-Agent header value
+      # @option options [String] :region ("us-east-1") The server API endpoint host
       # @option options [String] :message_id_domain ("us-east-1.amazonses.com") Domain used to build message_id header
       # @return [Object] the object.
       def initialize( options = {} )
@@ -97,15 +106,18 @@ module AWS #:nodoc:
                     :message_id_domain => DEFAULT_MESSAGE_ID_DOMAIN,
                     :path => "/",
                     :user_agent => USER_AGENT,
-                    :proxy_server => nil
+                    :proxy_server => nil,
+                    :region => DEFAULT_REGION
                     }.merge(options)
 
+        @signature_version = options[:signature_version] || 2
         @server = options[:server]
         @message_id_domain = options[:message_id_domain]
         @proxy_server = options[:proxy_server]
         @use_ssl = options[:use_ssl]
         @path = options[:path]
         @user_agent = options[:user_agent]
+        @region = options[:region]
         @settings = {}
 
         raise ArgumentError, "No :access_key_id provided" if options[:access_key_id].nil? || options[:access_key_id].empty?
@@ -153,7 +165,7 @@ module AWS #:nodoc:
         timestamp = Time.now.getutc
 
         params.merge!( {"Action" => action,
-                        "SignatureVersion" => "2",
+                        "SignatureVersion" => signature_version.to_s,
                         "SignatureMethod" => 'HmacSHA256',
                         "AWSAccessKeyId" => @access_key_id,
                         "Version" => API_VERSION,
@@ -165,9 +177,9 @@ module AWS #:nodoc:
 
         req = {}
 
-        req['X-Amzn-Authorization'] = get_aws_auth_param(timestamp.httpdate, @secret_access_key)
+        req['X-Amzn-Authorization'] = get_aws_auth_param(timestamp.httpdate, @secret_access_key, action, signature_version.to_s)
         req['Date'] = timestamp.httpdate
-        req['User-Agent'] = @user_agent 
+        req['User-Agent'] = @user_agent
 
         response = connection.post(@path, query, req)
         
@@ -182,9 +194,73 @@ module AWS #:nodoc:
       end
 
       # Set the Authorization header using AWS signed header authentication
-      def get_aws_auth_param(timestamp, secret_access_key)
+      def get_aws_auth_param(timestamp, secret_access_key, action = '', signature_version = 2)
         encoded_canonical = SES.encode(secret_access_key, timestamp, false)
-        SES.authorization_header(@access_key_id, 'HmacSHA256', encoded_canonical)
+        return SES.authorization_header(@access_key_id, 'HmacSHA256', encoded_canonical) unless signature_version == 4
+
+        SES.authorization_header_v4(sig_v4_auth_credential, sig_v4_auth_signed_headers, sig_v4_auth_signature(action))
+      end
+
+      private
+
+      def sig_v4_auth_credential
+        @access_key_id + '/' + credential_scope
+      end
+
+      def sig_v4_auth_signed_headers
+        'host;x-amz-date'
+      end
+
+      def credential_scope
+        datestamp + '/' + region + '/' + SERVICE + '/' + 'aws4_request'
+      end
+
+      def string_to_sign(for_action)
+        "AWS4-HMAC-SHA256\n" +  amzdate + "\n" +  credential_scope + "\n" + Digest::SHA256.hexdigest(canonical_request(for_action).encode('utf-8').b)
+      end
+
+
+      def amzdate
+        Time.now.utc.strftime('%Y%m%dT%H%M%SZ')
+      end
+
+      def datestamp
+        Time.now.utc.strftime('%Y%m%d')
+      end
+
+      def canonical_request(for_action)
+        "GET" + "\n" + "/" + "\n" + canonical_querystring(for_action) + "\n" + canonical_headers + "\n" + sig_v4_auth_signed_headers + "\n" + payload_hash
+      end
+
+      def canonical_querystring(action)
+        "Action=#{action}&Version=2013-10-15"
+      end
+
+      def canonical_headers
+        'host:' + server + "\n" + 'x-amz-date:' + amzdate + "\n"
+      end
+
+      def payload_hash
+        Digest::SHA256.hexdigest(''.encode('utf-8'))
+      end
+
+      def sig_v4_auth_signature(for_action)
+        signing_key = getSignatureKey(@secret_access_key, datestamp, region, SERVICE)
+
+        OpenSSL::HMAC.hexdigest("SHA256", signing_key, string_to_sign(for_action).encode('utf-8'))
+      end
+
+      def getSignatureKey(key, dateStamp, regionName, serviceName)
+        kDate = sign(('AWS4' + key).encode('utf-8'), dateStamp)
+        kRegion = sign(kDate, regionName)
+        kService = sign(kRegion, serviceName)
+        kSigning = sign(kService, 'aws4_request')
+
+        kSigning
+      end
+
+      def sign(key, msg)
+        OpenSSL::HMAC.digest("SHA256", key, msg.encode('utf-8'))
       end
     end # class Base
   end # Module SES

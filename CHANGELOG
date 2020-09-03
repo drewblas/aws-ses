@@ -1,4 +1,11 @@
-0.4.5:
+0.7.0:
+* Implement Authorization Header v4 (add config: `signature_version: 4`)
+* Wrap message ID in `<>` correctly
+
+0.6.0:
+* Various small bug fixes
+
+0.5.0:
 * Check for existence of html or text body when attachments are included
 * Message ids in mail objects should now reflect what is actually sent.
 

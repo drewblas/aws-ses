@@ -141,7 +141,7 @@ This gem is compatible with Rails >= 3.0.0 and Ruby 2.3.x
 
 To use, first add the gem to your Gemfile:
 
-    gem "aws-ses", "~> 0.6.0", :require => 'aws/ses'
+    gem "aws-ses", "~> 0.7.0", :require => 'aws/ses'
     
 == For Rails 3.x
 
@@ -149,7 +149,8 @@ Then, add your Amazon credentials and extend ActionMailer in `config/initializer
 
     ActionMailer::Base.add_delivery_method :ses, AWS::SES::Base,
       :access_key_id     => 'abc',
-      :secret_access_key => '123'
+      :secret_access_key => '123',
+      :signature_version => 4
 
 Then set the delivery method in `config/environments/*.rb` as appropriate:
 

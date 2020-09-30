@@ -177,7 +177,7 @@ module AWS #:nodoc:
 
         req = {}
 
-        req['X-Amzn-Authorization'] = get_aws_auth_param(timestamp.httpdate, @secret_access_key, action, signature_version.to_s)
+        req['X-Amzn-Authorization'] = get_aws_auth_param(timestamp.httpdate, @secret_access_key, action, signature_version)
         req['Date'] = timestamp.httpdate
         req['User-Agent'] = @user_agent
 
@@ -195,10 +195,14 @@ module AWS #:nodoc:
 
       # Set the Authorization header using AWS signed header authentication
       def get_aws_auth_param(timestamp, secret_access_key, action = '', signature_version = 2)
+        raise(ArgumentError, "signature_version must be `2` or `4`") unless signature_version == 2 || signature_version == 4
         encoded_canonical = SES.encode(secret_access_key, timestamp, false)
-        return SES.authorization_header(@access_key_id, 'HmacSHA256', encoded_canonical) unless signature_version == 4
 
-        SES.authorization_header_v4(sig_v4_auth_credential, sig_v4_auth_signed_headers, sig_v4_auth_signature(action))
+        if signature_version == 4
+          SES.authorization_header_v4(sig_v4_auth_credential, sig_v4_auth_signed_headers, sig_v4_auth_signature(action))
+        else
+          SES.authorization_header(@access_key_id, 'HmacSHA256', encoded_canonical)
+        end
       end
 
       private

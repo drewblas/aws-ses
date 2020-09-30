@@ -1,3 +1,6 @@
+0.7.1:
+* Bugfix in sig version v4 detection
+
 0.7.0:
 * Implement Authorization Header v4 (add config: `signature_version: 4`)
 * Wrap message ID in `<>` correctly

@@ -42,7 +42,9 @@ module AWS #:nodoc:
     DEFAULT_HOST = 'email.us-east-1.amazonaws.com'
 
     DEFAULT_MESSAGE_ID_DOMAIN = 'email.amazonses.com'
-    
+
+    DEFAULT_SIGNATURE_VERSION = 4
+
     USER_AGENT = 'github-aws-ses-ruby-gem'
     
     # Encodes the given string with the secret_access_key by taking the
@@ -107,10 +109,11 @@ module AWS #:nodoc:
                     :path => "/",
                     :user_agent => USER_AGENT,
                     :proxy_server => nil,
-                    :region => DEFAULT_REGION
+                    :region => DEFAULT_REGION,
+                    :signature_version => DEFAULT_SIGNATURE_VERSION,
                     }.merge(options)
 
-        @signature_version = options[:signature_version] || 2
+        @signature_version = options[:signature_version]
         @server = options[:server]
         @message_id_domain = options[:message_id_domain]
         @proxy_server = options[:proxy_server]
@@ -194,7 +197,7 @@ module AWS #:nodoc:
       end
 
       # Set the Authorization header using AWS signed header authentication
-      def get_aws_auth_param(timestamp, secret_access_key, action = '', signature_version = 2)
+      def get_aws_auth_param(timestamp, secret_access_key, action = '', signature_version = self.DEFAULT_SIGNATURE_VERSION)
         raise(ArgumentError, "signature_version must be `2` or `4`") unless signature_version == 2 || signature_version == 4
         encoded_canonical = SES.encode(secret_access_key, timestamp, false)
 

@@ -44,6 +44,8 @@ module AWS #:nodoc:
     DEFAULT_MESSAGE_ID_DOMAIN = 'email.amazonses.com'
     
     USER_AGENT = 'github-aws-ses-ruby-gem'
+
+    DEFAULT_SIGNATURE_VERSION = 4
     
     # Encodes the given string with the secret_access_key by taking the
     # hmac-sha1 sum, and then base64 encoding it.  Optionally, it will also
@@ -107,10 +109,11 @@ module AWS #:nodoc:
                     :path => "/",
                     :user_agent => USER_AGENT,
                     :proxy_server => nil,
-                    :region => DEFAULT_REGION
+                    :region => DEFAULT_REGION,
+                    :signature_version => DEFAULT_SIGNATURE_VERSION
                     }.merge(options)
 
-        @signature_version = options[:signature_version] || 2
+        @signature_version = options[:signature_version]
         @server = options[:server]
         @message_id_domain = options[:message_id_domain]
         @proxy_server = options[:proxy_server]
@@ -125,6 +128,7 @@ module AWS #:nodoc:
         raise ArgumentError, "No :use_ssl value provided" if options[:use_ssl].nil?
         raise ArgumentError, "Invalid :use_ssl value provided, only 'true' or 'false' allowed" unless options[:use_ssl] == true || options[:use_ssl] == false
         raise ArgumentError, "No :server provided" if options[:server].nil? || options[:server].empty?
+        raise ArgumentError, ":signature_version must be 2 or 4" unless [2, 4].include?(options[:signature_version])
 
         if options[:port]
           # user-specified port
@@ -177,7 +181,7 @@ module AWS #:nodoc:
 
         req = {}
 
-        req['X-Amzn-Authorization'] = get_aws_auth_param(timestamp.httpdate, @secret_access_key, action, signature_version)
+        req['X-Amzn-Authorization'] = get_aws_auth_param(timestamp.httpdate, @secret_access_key, action)
         req['Date'] = timestamp.httpdate
         req['User-Agent'] = @user_agent
 
@@ -194,8 +198,7 @@ module AWS #:nodoc:
       end
 
       # Set the Authorization header using AWS signed header authentication
-      def get_aws_auth_param(timestamp, secret_access_key, action = '', signature_version = 2)
-        raise(ArgumentError, "signature_version must be `2` or `4`") unless signature_version == 2 || signature_version == 4
+      def get_aws_auth_param(timestamp, secret_access_key, action = '')
         encoded_canonical = SES.encode(secret_access_key, timestamp, false)
 
         if signature_version == 4

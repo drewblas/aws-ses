@@ -166,7 +166,7 @@ module AWS #:nodoc:
       def request(action, params = {})
         @action = action
         # Use a copy so that we don't modify the caller's Hash, remove any keys that have nil or empty values
-        params = params.reject { |key, value| value.nil? or value.empty?}
+        params = params.reject { |_, value| value.nil? or value.empty?}
 
         @action_time = Time.now.getutc
 
@@ -248,7 +248,7 @@ module AWS #:nodoc:
       end
 
       def canonical_request
-        "POST" + "\n" + "/" + "\n" + canonical_querystring(@action) + "\n" + canonical_headers + "\n" + sig_v4_auth_signed_headers + "\n" + payload_hash
+        "POST" + "\n" + "/" + "\n" + canonical_querystring + "\n" + canonical_headers + "\n" + sig_v4_auth_signed_headers + "\n" + payload_hash
       end
 
       def canonical_querystring

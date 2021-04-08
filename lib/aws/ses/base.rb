@@ -88,7 +88,7 @@ module AWS #:nodoc:
       include Info
 
       attr_reader :use_ssl, :server, :proxy_server, :port, :message_id_domain, :signature_version, :region,
-                  :action, :action_time
+                  :action, :action_time, :query
       attr_accessor :settings
 
       # @option options [String] :access_key_id ("") The user's AWS Access Key ID
@@ -177,13 +177,9 @@ module AWS #:nodoc:
                         "Version" => API_VERSION,
                         "Timestamp" => action_time.iso8601 } )
 
-        query = params.sort.collect do |param|
+        @query = params.sort.collect do |param|
           CGI::escape(param[0]) + "=" + CGI::escape(param[1])
         end.join("&")
-
-        req = {}
-
-
         response = connection.post(@path, query, get_req_headers)
 
         response_class = AWS::SES.const_get( "#{action}Response" )
@@ -252,7 +248,7 @@ module AWS #:nodoc:
       end
 
       def canonical_querystring
-        "Action=#{action}&Version=2013-10-15"
+        signature_version == 2 ? "Action=#{action}&Version=2013-10-15" : ''
       end
 
       def canonical_headers
@@ -260,7 +256,7 @@ module AWS #:nodoc:
       end
 
       def payload_hash
-        Digest::SHA256.hexdigest(''.encode('utf-8'))
+        Digest::SHA256.hexdigest(query.encode('utf-8'))
       end
 
       def sig_v4_auth_signature

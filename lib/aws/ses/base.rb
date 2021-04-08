@@ -260,9 +260,7 @@ module AWS #:nodoc:
       end
 
       def sig_v4_auth_signature
-        signing_key = getSignatureKey
-
-        OpenSSL::HMAC.hexdigest("SHA256", signing_key, string_to_sign.encode('utf-8'))
+        OpenSSL::HMAC.hexdigest("SHA256", getSignatureKey, string_to_sign.encode('utf-8'))
       end
 
       def getSignatureKey

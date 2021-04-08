@@ -209,7 +209,7 @@ module AWS #:nodoc:
 
       # Set the Authorization header using AWS signed header authentication
       def get_aws_auth_header_v2
-        encoded_canonical = SES.encode(@secret_access_key, action_time.httpdate, false)
+        encoded_canonical = SES.encode(@secret_access_key, httpdate, false)
         SES.authorization_header(@access_key_id, 'HmacSHA256', encoded_canonical)
       end
 
@@ -236,11 +236,17 @@ module AWS #:nodoc:
       end
 
       def amzdate
+        @action_time ||= Time.now.getutc
         action_time.strftime('%Y%m%dT%H%M%SZ')
       end
 
       def datestamp
+        @action_time ||= Time.now.getutc
         action_time.strftime('%Y%m%d')
+      end
+
+      def httpdate
+        @action_time ||= Time.now.getutc.httpdate
       end
 
       def canonical_request
@@ -256,7 +262,7 @@ module AWS #:nodoc:
       end
 
       def payload_hash
-        Digest::SHA256.hexdigest(query.encode('utf-8'))
+        Digest::SHA256.hexdigest(query.to_s.encode('utf-8'))
       end
 
       def sig_v4_auth_signature

@@ -1,6 +1,7 @@
 0.8.1:
 * Bugs fixed for Aws signature V4 version.
 * Default AWS signature version has been updated to v4.
+
 0.7.1:
 * Bugfix in sig version v4 detection
 

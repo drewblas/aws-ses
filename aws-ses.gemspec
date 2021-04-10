@@ -5,7 +5,7 @@
 # stub: aws-ses 0.7.1 ruby lib
 
 Gem::Specification.new do |s|
-  s.name = "aws-ses-sigv4".freeze
+  s.name = "aws-ses-v4".freeze
   s.version = "0.8.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=

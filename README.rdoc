@@ -1,6 +1,6 @@
 = AWS::SES
 
-{<img src="https://badge.fury.io/rb/aws-ses.svg" alt="http://rubygems.org">}[http://badge.fury.io/rb/aws-ses]
+{<img src="https://badge.fury.io/rb/aws-ses-sigv4.svg" alt="http://rubygems.org">}[http://badge.fury.io/rb/aws-ses-sigv4]
 
 AWS::SES is a Ruby library for Amazon's Simple Email Service's REST API (http://aws.amazon.com/ses).
 

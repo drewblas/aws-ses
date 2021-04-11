@@ -1,5 +1,7 @@
 = AWS::SES
 
+{<img src="https://badge.fury.io/rb/aws-ses-v4.svg" alt="http://rubygems.org">}[http://badge.fury.io/rb/aws-ses-v4]
+
 AWS::SES is a Ruby library for Amazon's Simple Email Service's REST API (http://aws.amazon.com/ses).
 
 == Getting started
@@ -141,7 +143,7 @@ This gem is compatible with Rails >= 3.0.0 and Ruby 2.3.x
 
 To use, first add the gem to your Gemfile:
 
-    gem "aws-ses", "~> 0.7.0", :require => 'aws/ses'
+    gem "aws-ses-v4", "~> 0.8.1", :require => 'aws/ses'
     
 == For Rails 3.x
 

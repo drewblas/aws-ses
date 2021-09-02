@@ -51,7 +51,7 @@ GEM
     rack (2.2.3)
     rake (13.0.1)
     rchardet (1.8.0)
-    rdoc (6.2.0)
+    rdoc (6.3.2)
     semver2 (3.4.2)
     shoulda-context (1.2.1)
     test-unit (3.3.6)
